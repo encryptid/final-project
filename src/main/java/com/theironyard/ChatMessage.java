@@ -2,7 +2,7 @@ package com.theironyard;
 
 public class ChatMessage {
 
-    private String message;
+    public String message;
 
     public ChatMessage() {
 

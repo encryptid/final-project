@@ -14,5 +14,6 @@ public class ChatController {
     @MessageMapping("/hello/{channel}")
     public void Greeting(@DestinationVariable String channel, ChatMessage message) throws Exception {
         template.convertAndSend(String.format("/topic/%s", channel), new Greeting("" + message.getMessage()));
+        System.out.println(message);
     }
 }
