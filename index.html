@@ -21,7 +21,7 @@
 
     <p>You're standing in the center of a room with four walls surrounding you. How would you like to proceed?</p>
      
-    <input type="text" name="choice">
+    <input type="text" name="choice" placeholder="Command line">
 
     <h2>Move:</h2>
     <div class="cursor">
@@ -33,7 +33,28 @@
         <button id="down">Down</button>
     </div>
 
-   
+    <section class="chat">
+        <main>
+            <input type="text" name="name" placeholder="Enter Name">
+            <input type="text" name="channel" placeholder="DM">
+            <div class="chatBody">
+                <ul>
+                    <li>
+                        <p>From:</p>
+                        <p>Here's where all the chat happens</p>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <p>From:</p>
+                        <p>Msg: More chat</p>
+                    </li>
+                </ul>
+            </div>
+            <input type="text" name="enterMsg" placeholder="Enter message">
+        </main>
+    </section>
+
 </body>
 
 </html>

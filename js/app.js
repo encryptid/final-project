@@ -28,20 +28,20 @@ window.addEventListener('load', function () {
     let down = document.querySelector('#down');
     let box = document.querySelector('input');
 
-    up.addEventListener('click', function() {
+    up.addEventListener('click', function () {
         console.log('move up');
     });
-    left.addEventListener('click', function() {
+    left.addEventListener('click', function () {
         console.log('move left');
     });
-    right.addEventListener('click', function() {
+    right.addEventListener('click', function () {
         console.log('move right');
     });
-    down.addEventListener('click', function() {
+    down.addEventListener('click', function () {
         console.log('move down');
     });
 
-    box.addEventListener('keyup', function() {
+    box.addEventListener('keyup', function () {
         const keyname = event.key;
         if (keyname === "Enter") {
             client.send(box.value);
@@ -77,30 +77,33 @@ window.addEventListener('load', function () {
 //     });
 // }
 
-// function disconnect() {
-//     if (stompClient != null) {
-//         stompClient.disconnect();
-//     }
-//     setConnected(false);
-//     console.log("Disconnected");
-// }
 
-// function sendName() {
-//     let channel = $("#channel").val();
 
-//     for (var x in stompClient.subscriptions) {
-//         stompClient.unsubscribe(x);
-//     }
+function disconnect() {
+    if (stompClient != null) {
+        stompClient.disconnect();
+    }
+    setConnected(false);
+    console.log("Disconnected");
+}
 
-//     stompClient.subscribe('/topic/' + channel, function (greeting) {
-//         showGreeting(JSON.parse(greeting.body).content);
-//     });
-//     stompClient.send("/app/hello/" + channel, {}, JSON.stringify({name: $("#name").val()}));
-// }
+function sendName() {
+    //let channel = $("#channel").val();
 
-// function showGreeting(message) {
-//     $("#greetings").append("<tr><td>" + message + "</td></tr>");
-// }
+    for (var x in stompClient.subscriptions) {
+        stompClient.unsubscribe(x);
+    }
+
+    stompClient.subscribe('/topic/main', function (greeting) {
+        showGreeting(JSON.parse(greeting.body).content);
+    });
+
+    stompClient.send("/app/hello/", {}, JSON.stringify({ name: $("#name").val() }));
+}
+
+function showGreeting(message) {
+    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+}
 
 // $(function () {
 //     $("form").on('submit', function (e) {

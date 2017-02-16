@@ -51,5 +51,12 @@ body {
         background-color: black;
         color: #00ff00;
         border: 1px solid #00ff00;
+        font-family: 'VT323', monospace; 
+        
+    }
+
+    .chat {
+        text-align: left;
+        border: 2px solid #00ff00;
     }
 }
