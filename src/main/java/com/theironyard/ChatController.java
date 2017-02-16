@@ -13,7 +13,40 @@ public class ChatController {
 
     @MessageMapping("/hello/{channel}")
     public void Greeting(@DestinationVariable String channel, ChatMessage message) throws Exception {
-        template.convertAndSend(String.format("/topic/%s", channel), new Greeting("" + message.getMessage()));
-        System.out.println(message);
+        // TODO: server stuff here.
+
+        switch (message.type){
+            case "move":
+                template.convertAndSend("/channel/lincoln", new Greeting("You have moved " +message.getMessage()));
+
+                break;
+
+            case "use":
+                break;
+
+            case "take":
+                break;
+
+            case "search":
+                break;
+
+            case "inventory":
+                break;
+
+            default:
+        }
+
+
+        }
+
+        // First arg: where to send it (channel name)
+        // Second arg: what to send
+        //template.convertAndSend("/channel/lincoln", new Greeting("I hear ya: " + message.getMessage()));
+//        System.out.println(message.getMessage());
     }
-}
+
+//    @MessageMapping("/hello/{channel}")
+//    public void Greeting(@DestinationVariable String channel, ChatMessage message) throws Exception {
+//        template.convertAndSend(String.format("/channel/%s", channel), new Greeting("" + message.getMessage()));
+//        System.out.println(message.getMessage());
+//    }
