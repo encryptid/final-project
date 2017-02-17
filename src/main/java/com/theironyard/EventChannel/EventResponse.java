@@ -1,4 +1,4 @@
-package com.theironyard;
+package com.theironyard.EventChannel;
 
 /**
  * Created by stephenwilliamson on 2/14/17.

@@ -1,4 +1,4 @@
-package com.theironyard;
+package com.theironyard.EventChannel;
 
 public class EventMessage {
 

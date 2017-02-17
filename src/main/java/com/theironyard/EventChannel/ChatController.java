@@ -1,5 +1,6 @@
-package com.theironyard;
+package com.theironyard.EventChannel;
 
+import com.theironyard.EventChannel.Objects.Direction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -17,17 +18,26 @@ public class ChatController {
 
         switch (message.type){
             case "move":
-                template.convertAndSend("/channel/lincoln", new EventResponse("You have moved " +message.getMessage()));
+                Direction d = new Direction();
+                d.name = message.getMessage();
+                template.convertAndSend("/channel/lincoln", new EventResponse("You are walking " +d.name));
+
 
                 break;
 
             case "use":
+                template.convertAndSend("/channel/lincoln", new EventResponse("You are doing it guy!"));
+
                 break;
 
             case "take":
+                template.convertAndSend("/channel/lincoln", new EventResponse("You have aquired " + message.getMessage()));
+
                 break;
 
             case "search":
+                template.convertAndSend("/channel/lincoln", new EventResponse("You have searched the " + message.getMessage()));
+
                 break;
 
             case "inventory":
