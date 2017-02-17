@@ -12,12 +12,12 @@ public class ChatController {
     SimpMessagingTemplate template;
 
     @MessageMapping("/hello/{channel}")
-    public void Greeting(@DestinationVariable String channel, ChatMessage message) throws Exception {
+    public void Greeting(@DestinationVariable String channel, EventMessage message) throws Exception {
         // TODO: server stuff here.
 
         switch (message.type){
             case "move":
-                template.convertAndSend("/channel/lincoln", new Greeting("You have moved " +message.getMessage()));
+                template.convertAndSend("/channel/lincoln", new EventResponse("You have moved " +message.getMessage()));
 
                 break;
 
@@ -41,12 +41,12 @@ public class ChatController {
 
         // First arg: where to send it (channel name)
         // Second arg: what to send
-        //template.convertAndSend("/channel/lincoln", new Greeting("I hear ya: " + message.getMessage()));
+        //template.convertAndSend("/channel/lincoln", new EventResponse("I hear ya: " + message.getMessage()));
 //        System.out.println(message.getMessage());
     }
 
 //    @MessageMapping("/hello/{channel}")
-//    public void Greeting(@DestinationVariable String channel, ChatMessage message) throws Exception {
-//        template.convertAndSend(String.format("/channel/%s", channel), new Greeting("" + message.getMessage()));
+//    public void EventResponse(@DestinationVariable String channel, EventMessage message) throws Exception {
+//        template.convertAndSend(String.format("/channel/%s", channel), new EventResponse("" + message.getMessage()));
 //        System.out.println(message.getMessage());
 //    }

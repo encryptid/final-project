@@ -1,12 +1,12 @@
 package com.theironyard;
 
-public class ChatMessage {
+public class EventMessage {
 
     public String type;
 
     public String message;
 
-    public ChatMessage() {
+    public EventMessage() {
 
     }
 
@@ -18,7 +18,7 @@ public class ChatMessage {
         this.type = type;
     }
 
-    public ChatMessage(String type, String message) {
+    public EventMessage(String type, String message) {
         this.type = type;
         this.message = message;
     }

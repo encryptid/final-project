@@ -3,15 +3,15 @@ package com.theironyard;
 /**
  * Created by stephenwilliamson on 2/14/17.
  */
-public class Greeting {
+public class EventResponse {
 
     private String content;
 
-    public Greeting(){
+    public EventResponse(){
 
     }
 
-    public Greeting(String content) {
+    public EventResponse(String content) {
         this.content = content;
     }
 
