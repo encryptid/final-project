@@ -1,11 +1,20 @@
 const app = angular.module('GameApp', []);
 
-app.controller('CursorController', function ($scope, DemoService) {
+app.controller('EventController', function ($scope, DemoService) {
+    // What is the purpose of this controller? To populate the "events" box with info from the back end that is
+    // related to gameplay info. This should happen automatically.
+    // $scope.addEvent = function () {
+    //     $scope.chats = DemoService.returnEvents();
+    //     console.log($scope.chats);
+    // }
+})
 
-    $scope.addThing = function () {
-        $scope.things = DemoService.returnThings();
-        console.log($scope.things);
-    }
+app.controller('CursorController', function ($scope, DemoService) {
+    //The purpose of this controller is to control the functions related to the "cursor"
+    // $scope.addThing = function () {
+    //     $scope.chats = DemoService.returnEvents();
+    //     console.log($scope.chats);
+    // }
 
     $scope.up = function () {
         console.log('up working!');
@@ -27,50 +36,103 @@ app.controller('CursorController', function ($scope, DemoService) {
 });
 
 app.controller('CommandController', function ($scope, DemoService) {
-
+    //The purpose of this controller is to handle validation of user input before submitting it
     $scope.terminal = "";
     $scope.command = function () {
         // console.log($scope.terminal);
-        if ($scope.terminal !== ("use" || "take" || "search" || "inventory")) {
-            console.log ("Quit being stupid")
-        } else {
-            console.log($scope.terminal);
-            DemoService.action($scope.terminal);
+
+        if ($scope.terminal === 'use') {
+            DemoService.action('use', 'something');
+        } else if ($scope.terminal === 'take') {
+            DemoService.action('take', 'something');
+        } else if ($scope.terminal === 'search') {
+            DemoService.action('search')
         }
+
+
+        // if ('house' === 'cat' || 'boat' || 'car') {
+
+        // }
+        //  if ($scope.terminal !== "use" || $scope.terminal !== "take" || $scope.terminal !== "search" || $scope.terminal !== "inventory") {
+        //     console.log("Quit being not super smart. But still smart.")
+        // } else {
+        //     console.log($scope.terminal);
+        //     DemoService.action($scope.terminal);
+        // }
     }
+
+});
+
+app.controller('ChatController', function ($scope, DemoService) {
+    // The purpose of this controller is to manage the functions of the chat section.
+    //New chats should be populated automatically without direct intervention
+    // $scope.addChat = function () {
+    //     $scope.chats = DemoService.returnEvents();
+    //     console.log($scope.chats);
+    // }
+
+    DemoService.connect(function () {
+        // Weird angular-magic. The $apply function tells angular that something is changing
+        // in the function that is going to be of interest to templates.
+        // 'Apply these updates to the template when they're done.'
+        $scope.$apply(function () {
+            $scope.chats = DemoService.returnEvents();
+        });
+    });
 })
 
 app.factory('DemoService', function ($http) {
-
-    const things = [];
+    const events = [];
 
     // const toad = new SockJS('http://192.168.1.22:8080/gamesock');
-    const toad = new SockJS('http://192.168.1.22:8080/gamesock');
-    const client = Stomp.over(toad);
+    let client = null;
 
-    client.connect({}, function () {
-        console.log('connected woohooo');
+    // client.connect({}, function () {
+    //     console.log('connected woohooo');
 
-        client.subscribe('/channel/lincoln', response => {
-            //subscribes to the url laid out in the first parameter.
-            //second parameter is an arrow function with response as the parameter
-            const info = JSON.parse(response.body)
-            //assign the response to a variable called 'msg'
-            console.log(info.content);
-            things.push(info.content);
-        });
-    });
+    //     client.subscribe('/channel/lincoln', response => {
+    //         //subscribes to the url laid out in the first parameter.
+    //         //second parameter is an arrow function with response as the parameter
+    //         const info = JSON.parse(response.body)
+    //         //assign the response to a variable called 'msg'
+    //         console.log(response);
+    //         console.log(info.content);
+    //         events.push(info.content);
+    //     });
+    // });
 
     return {
+        connect: function (cb) {
+            const toad = new SockJS('https://fathomless-bastion-47154.herokuapp.com/gamesock');
+            client = Stomp.over(toad);
+
+            client.connect({}, function () {
+                console.log('connected woohooo');
+
+                client.subscribe('/channel/lincoln', response => {
+                    //subscribes to the url laid out in the first parameter.
+                    //second parameter is an arrow function with response as the parameter
+                    const info = JSON.parse(response.body)
+                    //assign the response to a variable called 'msg'
+                    console.log(response);
+                    console.log(info.content);
+                    events.push(info.content);
+
+                    // Reason: we need to do something every time a new message comes in, 
+                    // specifically update the DOM.
+                    cb();
+                });
+            });
+        },
         move: function (direction) {
             // console.log(direction);
             let movement = {         //this is the key to everything. the variable doesn't matter, but
                 type: 'move',       //type: and message: have to be there.
-                message: direction,   
+                message: direction,
             };
             client.send('/app/hello/lincoln', {}, JSON.stringify(movement));
         },
-        action: function (action/**, target*/) {
+        action: function (action, target) {
             let command = {
                 type: action,
                 message: target
@@ -78,9 +140,9 @@ app.factory('DemoService', function ($http) {
             client.send('/app/hello/lincoln', {}, JSON.stringify(command));
         },
 
-        returnThings: function () {
-            console.log(things);
-            return things
+        returnEvents: function () {
+            console.log(events);
+            return events
         }
     }
 })

@@ -19,8 +19,10 @@
 
 <body ng-app="GameApp">
     <h1>Death Trap 5000</h1>
-    <section>
-    <p>You're standing in the center of a room with four walls surrounding you. How would you like to proceed?</p>
+    <section ng-controller="EventController">
+        <p>You're standing in the center of a room with four walls surrounding you. How would you like to proceed?</p>
+        <p ng-repeat="thing in things">{{ thing }}</p>
+    </section>
     
     <section ng-controller="CommandController">
     <input type="text" name="choice" ng-model="terminal" placeholder="Command line">
@@ -42,28 +44,27 @@
         <button id="downBtn" ng-click="down()">Down</button>
     </div>
 
-    <section class="chat">
+    <section class="chat" ng-controller="ChatController">
         <main>
             <input type="text" name="name" placeholder="Enter Name">
             <input type="text" name="channel" placeholder="DM">
-            <div class="chatBody" ng-repeat="thing in things"> <!-- added for testing -->
+            <div class="chatBody" ng-repeat="chat in chats track by $index"> <!-- added for testing -->
                 <ul>
                     <li>
-                        <p>{{ thing }}</p>
-                        <p>Other stuff:</p>
+                        <p>{{ chat }}</p>
+                        <!--<p>Other stuff:</p>-->
                     </li>
                 </ul>
-                <ul>
+                <!--<ul>
                     <li>
                         <p>From:</p>
                         <p>Msg: More chat</p>
                     </li>
-                </ul>
+                </ul>-->
             </div>
             <input type="text" name="enterMsg" placeholder="Enter message">
-            <button ng-click="addThing()">Get!</button>
+            <button ng-click="addChat()">Get!</button>
         </main>
-    </section>
     </section>
 
 </body>
