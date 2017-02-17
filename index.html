@@ -19,20 +19,27 @@
 
 <body ng-app="GameApp">
     <h1>Death Trap 5000</h1>
-    <section ng-controller="DemoController">
+    <section>
     <p>You're standing in the center of a room with four walls surrounding you. How would you like to proceed?</p>
     
-    <input type="text" name="choice" placeholder="Command line">
+    <section ng-controller="CommandController">
+    <input type="text" name="choice" ng-model="terminal" placeholder="Command line">
+    <button ng-click="command()">Enter</button>
+    </section>
 
     <h2>Move:</h2>
-    <button ng-click="connect()">Connect</button> <!-- added this for testing -->
-    <div class="cursor">
-        <button id="up" ng-click="up()">Up</button>
+    <!--<button ng-click="connect()">Connect</button>  added this for testing -->
+    <div class="cursor" ng-controller="CursorController">
+        <button id="upBtn" ng-click="up()">Up</button>
         <div id="sides">
-            <button id="left">Left</button>
-            <button id="right">Right</button>
+            <div id="left">
+                <button id="leftBtn" ng-click="left()">Left</button>
+            </div>
+            <div id="right">
+                <button id="rightBtn" ng-click="right()">Right</button>
+            </div>
         </div>
-        <button id="down">Down</button>
+        <button id="downBtn" ng-click="down()">Down</button>
     </div>
 
     <section class="chat">

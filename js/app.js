@@ -1,26 +1,50 @@
 const app = angular.module('GameApp', []);
 
-app.controller('DemoController', function ($scope, DemoService) {
+app.controller('CursorController', function ($scope, DemoService) {
 
     $scope.addThing = function () {
         $scope.things = DemoService.returnThings();
         console.log($scope.things);
-    }
-    $scope.connect = function () {
-        console.log('connect please!');
-        DemoService.connect();
     }
 
     $scope.up = function () {
         console.log('up working!');
         DemoService.move('up');
     }
+
+    $scope.left = function () {
+        DemoService.move('left');
+    }
+
+    $scope.right = function () {
+        DemoService.move('right');
+    }
+
+    $scope.down = function () {
+        DemoService.move('down');
+    }
+
 });
+
+app.controller('CommandController', function ($scope, DemoService) {
+
+    $scope.terminal = "";
+    $scope.command = function () {
+        // console.log($scope.terminal);
+        if ($scope.terminal !== ("use" || "take" || "search" || "inventory")) {
+            console.log ("Quit being stupid")
+        } else {
+            console.log($scope.terminal);
+            DemoService.action($scope.terminal);
+        }
+    }
+})
 
 app.factory('DemoService', function ($http) {
 
     const things = [];
 
+    // const toad = new SockJS('http://192.168.1.22:8080/gamesock');
     const toad = new SockJS('http://192.168.1.22:8080/gamesock');
     const client = Stomp.over(toad);
 
@@ -39,15 +63,21 @@ app.factory('DemoService', function ($http) {
 
     return {
         move: function (direction) {
-            console.log(direction);
-            let command = {         //this is the key to everything. the variable doesn't matter, but
+            // console.log(direction);
+            let movement = {         //this is the key to everything. the variable doesn't matter, but
                 type: 'move',       //type: and message: have to be there.
                 message: direction,   
             };
-            client.send('/app/hello/lincoln', {}, JSON.stringify(command));
-
-
+            client.send('/app/hello/lincoln', {}, JSON.stringify(movement));
         },
+        action: function (action/**, target*/) {
+            let command = {
+                type: action,
+                message: target
+            };
+            client.send('/app/hello/lincoln', {}, JSON.stringify(command));
+        },
+
         returnThings: function () {
             console.log(things);
             return things

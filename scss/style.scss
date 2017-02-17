@@ -43,7 +43,6 @@ body {
             }
             #left, #right {
                 @include grid-column(6);
-                width: 35%;
             }
     }
 
