@@ -1,6 +1,18 @@
-const app = angular.module('GameApp', []);
+const app = angular.module('GameApp', [/**'luegg.directives'*//**'ngScrollGlue'*/]);
 
 app.controller('EventController', function ($scope, DemoService) {
+
+    $scope.startText = "You're standing in the center of a room with four walls surrounding you. How would you like to proceed?";
+    DemoService.connect(function () {
+        console.log("connect running!")
+        // Weird angular-magic. The $apply function tells angular that something is changing
+        // in the function that is going to be of interest to templates.
+        // 'Apply these updates to the template when they're done.'
+        $scope.$apply(function () {
+            $scope.events = DemoService.returnEvents();
+            console.log("events in the EventController: " + $scope.events);
+        });
+    });
     // What is the purpose of this controller? To populate the "events" box with info from the back end that is
     // related to gameplay info. This should happen automatically.
     // $scope.addEvent = function () {
@@ -71,14 +83,16 @@ app.controller('ChatController', function ($scope, DemoService) {
     //     console.log($scope.chats);
     // }
 
-    DemoService.connect(function () {
-        // Weird angular-magic. The $apply function tells angular that something is changing
-        // in the function that is going to be of interest to templates.
-        // 'Apply these updates to the template when they're done.'
-        $scope.$apply(function () {
-            $scope.chats = DemoService.returnEvents();
-        });
-    });
+    //when the heroku endpoint for chats becomes available, create a new connect function for chats and uncomment 
+    //this:
+    // DemoService.connect(function () {
+    //     // Weird angular-magic. The $apply function tells angular that something is changing
+    //     // in the function that is going to be of interest to templates.
+    //     // 'Apply these updates to the template when they're done.'
+    //     $scope.$apply(function () {
+    //         $scope.chats = DemoService.returnEvents();
+    //     });
+    // });
 })
 
 app.factory('DemoService', function ($http) {
