@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Survive</title>
+    <title>Tablow</title>
     <!-- add css file -->
     <link rel="stylesheet" href="style.css">
     <!-- add js file -->
@@ -20,7 +20,7 @@
 </head>
 
 <body ng-app="GameApp">
-    <h1>Death Trap 5000</h1>
+    <h1>TaBlow</h1>
     <section class="eventBox" ng-controller="EventController" scroll-glue>
         <ul>
             <li>{{ startText }}</li>
@@ -30,7 +30,7 @@
 
     <div class="command">
        
-        <div class="cursor" ng-controller="CursorController">
+        <!--<div class="cursor" ng-controller="CursorController">
             <h2>Move:</h2>
             <button id="upBtn" ng-click="up()">Up</button>
             <div id="sides">
@@ -42,13 +42,13 @@
                 </div>
             </div>
             <button id="downBtn" ng-click="down()">Down</button>
-        </div>
+        </div>-->
 
         <section class="prompt" ng-controller="CommandController">
             <div id="one"></div>
             <div>
             <input type="text" name="choice" ng-model="terminal" placeholder="{{ prompt }}">
-            <button ng-click="command()">Enter</button>
+            <button ng-click="command()" class="select">Enter</button>
             </div>
             <div id="two"></div>
         </section>
@@ -72,8 +72,8 @@
                     </li>
                 </ul>-->
             </div>
-            <input type="text" name="enterMsg" placeholder="Enter message">
-            <!--<button ng-click="addChat()">Get!</button>--> <!--Shouldn't need this button anymore-->
+            <input type="text" ng-model="chatBox" name="enterMsg" placeholder="Enter message">
+            <button ng-click="addChat()">Submit</button>
         </main>
     </section>
 

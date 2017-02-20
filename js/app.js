@@ -18,10 +18,6 @@ app.controller('EventController', function ($scope, DemoService) {
 
 app.controller('CursorController', function ($scope, DemoService) {
     //The purpose of this controller is to control the functions related to the "cursor"
-    // $scope.addThing = function () {
-    //     $scope.chats = DemoService.returnEvents();
-    //     console.log($scope.chats);
-    // }
 
     $scope.up = function () {
         console.log('up working!');
@@ -45,9 +41,31 @@ app.controller('CursorController', function ($scope, DemoService) {
 app.controller('CommandController', function ($scope, DemoService) {
     //The purpose of this controller is to handle validation of user input before submitting it
     $scope.terminal = "";
-    $scope.prompt = "What would you like to do?"
+    $scope.prompt = "Input action"
     $scope.command = function () {
-
+        let type = "";
+        let value = "";
+        if ($scope.terminal === "take") {
+            type = $scope.terminal
+            $scope.terminal = "";
+            $scope.prompt = "Take which item?"
+            let btn = document.querySelector(".select");
+            btn.addEventListener('click', function() {
+                value = $scope.terminal
+                console.log(type, value);
+                console.log($scope.prompt);
+                $scope.prompt = "Input action";
+                return $scope.terminal = "";
+                //current hurdle: after the item is submitted, the textbox does not clear and reset the placeholder
+                //I think my current method is not ideally suited for this application.
+            });
+        } else if ($scope.terminal === "use") {
+            type = $scope.terminal
+        } else if ($scope.terminal === "search") {
+            type = $scope.terminal
+        } else if ($scope.terminal === "inventory") {
+            type = $scope.terminal
+        }
         // console.log($scope.terminal);
         // let splitter = $scope.terminal.split(" ")
         // console.log(splitter);
@@ -78,10 +96,15 @@ app.controller('CommandController', function ($scope, DemoService) {
 app.controller('ChatController', function ($scope, DemoService) {
     // The purpose of this controller is to manage the functions of the chat section.
     //New chats should be populated automatically without direct intervention
-    // $scope.addChat = function () {
-    //     $scope.chats = DemoService.returnEvents();
-    //     console.log($scope.chats);
-    // }
+    
+    
+    $scope.addChat = function () {
+        // console.log($scope.chatBox);
+        DemoService.chat($scope.chatBox);
+        $scope.chatBox = "";
+
+        // $scope.chats = DemoService.returnEvents();
+    }
 
     //when the heroku endpoint for chats becomes available, create a new connect function for chats and uncomment 
     //this:
@@ -99,7 +122,7 @@ app.factory('DemoService', function ($http) {
     const events = [];
 
     // const toad = new SockJS('http://192.168.1.22:8080/gamesock');
-    let client = null;
+    // let client = null;
 
     // client.connect({}, function () {
     //     console.log('connected woohooo');
@@ -117,16 +140,22 @@ app.factory('DemoService', function ($http) {
 
     return {
         connect: function (cb) {
-            const toad = new SockJS('https://fathomless-bastion-47154.herokuapp.com/gamesock');
+            // const toad = new SockJS('https://fathomless-bastion-47154.herokuapp.com/gamesock');
+            const toad = new SockJS('http://192.168.1.22:8080/gamesock');
             client = Stomp.over(toad);
 
-            client.connect({}, function () {
+            client.connect({
+                name: "Felix"
+            }, function () {
                 console.log('connected woohooo');
+                var urlparts = toad._transport.url.split("/");
+                currentUser = urlparts[urlparts.length - 2];
 
-                client.subscribe('/channel/lincoln', response => {
+                // /user/[sessionId]/
+                client.subscribe('/user/' + currentUser + '/', response => {
                     //subscribes to the url laid out in the first parameter.
                     //second parameter is an arrow function with response as the parameter
-                    const info = JSON.parse(response.body)
+                    const info = JSON.parse(response.body);
                     //assign the response to a variable called 'msg'
                     console.log(response);
                     console.log(info.content);
@@ -143,16 +172,24 @@ app.factory('DemoService', function ($http) {
             // console.log(direction);
             let movement = {         //this is the key to everything. the variable doesn't matter, but
                 type: 'move',       //type: and message: have to be there.
-                message: direction,
+                value: direction,
             };
-            client.send('/app/hello/lincoln', {}, JSON.stringify(movement));
+            client.send('/game/user-input', {}, JSON.stringify(movement));
         },
         action: function (action, target) {
             let command = {
                 type: action,
-                message: target
+                value: target
             };
-            client.send('/app/hello/lincoln', {}, JSON.stringify(command));
+            client.send('/game/user-input', {}, JSON.stringify(command));
+        },
+        chat: function(msg) {
+            let chat = {
+                type: 'chat',
+                value: msg
+            }
+
+            client.send('/game/user-input', {}, JSON.stringify(chat));
         },
 
         returnEvents: function () {

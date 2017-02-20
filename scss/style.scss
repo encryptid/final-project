@@ -68,43 +68,44 @@ body {
         border: 1px solid #00FF00;
         // height: 350px;
 
-        .cursor {
-            width: 300px;
-            @include grid-column(6);
-            border: 1px solid #00FF00;
-            // margin: 0 auto;
-            // padding-left: 0;
+        // .cursor {
+        //     width: 300px;
+        //     @include grid-column(6);
+        //     border: 1px solid #00FF00;
+        //     // margin: 0 auto;
+        //     // padding-left: 0;
 
-             h2 {
-                margin: 0;
-                border: 1px solid #00FF00;
-                background-color: #00FF00;
-                color: black;
-            }
+        //      h2 {
+        //         margin: 0;
+        //         border: 1px solid #00FF00;
+        //         background-color: #00FF00;
+        //         color: black;
+        //     }
 
-            .sides {
-                @include grid-row();
-                // height: 100px;
-                width: 500px;
-                // #up {
-                //     @include grid-column(12);
-                //     width: 100px;
-                }
-                #left, #right {
-                    @include grid-column(6);
-                }
-        }
+        //     .sides {
+        //         @include grid-row();
+        //         // height: 100px;
+        //         width: 500px;
+        //         // #up {
+        //         //     @include grid-column(12);
+        //         //     width: 100px;
+        //         }
+        //         #left, #right {
+        //             @include grid-column(6);
+        //         }
+        // }
 
         .prompt {
-            @include grid-column(6);
+            // @include grid-column(6);
             border: 1px solid #00FF00;
+            height: 100px;
 
             #one {
-                height: 85px;
+                height: 33px;
             }
 
             #two {
-                height: 85px;
+                height: 33px;
             }
         }
 }
