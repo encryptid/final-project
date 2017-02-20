@@ -1,21 +1,11 @@
-package com.theironyard.entities;
+package com.theironyard.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.*;
-import javax.persistence.Entity;
+import java.util.List;
 
-@Entity
-@Table(name = "users")
 public class User {
-    @Id
-    @GeneratedValue
-    int id;
-
-    @Column(nullable = false, unique = true)
     private String sessionId;
-
-    @Column(nullable = false, unique = true)
     public String name;
+    List<Item> inv;
 
     public User() {}
 
@@ -42,5 +32,13 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Item> getInv() {
+        return inv;
+    }
+
+    public void setInv(List<Item> inv) {
+        this.inv = inv;
     }
 }

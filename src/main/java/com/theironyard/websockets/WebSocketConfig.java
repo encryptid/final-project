@@ -1,4 +1,4 @@
-package com.theironyard.websocketstuff;
+package com.theironyard.websockets;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -14,12 +14,12 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/game");
-        registry.enableSimpleBroker("/room", "/user", "/user-input");
+        registry.enableSimpleBroker("/game", "/user", "/user-input");
     }
 
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/gamesock").withSockJS();
+        registry.addEndpoint("/gamesock").setAllowedOrigins("*").withSockJS();
     }
 }

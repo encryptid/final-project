@@ -1,11 +1,11 @@
 package com.theironyard.EventChannel;
 
-import com.theironyard.entities.Item;
-import com.theironyard.entities.User;
+import com.theironyard.models.Item;
+import com.theironyard.models.User;
 
 public class Command {
     private String type;
-    private Item value;
+    private String value;
     private User user;
 
     public User getUser() {
@@ -24,11 +24,11 @@ public class Command {
         this.type = type;
     }
 
-    public Item getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(Item value) {
+    public void setValue(String value) {
         this.value = value;
     }
 }

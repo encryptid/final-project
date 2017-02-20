@@ -1,11 +1,15 @@
-package com.theironyard.EventChannel;
+package com.theironyard.models;
 
-import com.theironyard.entities.User;
+import com.theironyard.models.User;
 
 public class StoryOutput {
 
     private String value;
     private User user;
+
+    public StoryOutput(String value) {
+        this.value = value;
+    }
 
     public StoryOutput(String value, User user) {
         this.value = value;
