@@ -47,7 +47,7 @@
         <section class="prompt" ng-controller="CommandController">
             <div id="one"></div>
             <div>
-            <input type="text" name="choice" ng-model="terminal" placeholder="Command line">
+            <input type="text" name="choice" ng-model="terminal" placeholder="{{ prompt }}">
             <button ng-click="command()">Enter</button>
             </div>
             <div id="two"></div>
@@ -73,7 +73,7 @@
                 </ul>-->
             </div>
             <input type="text" name="enterMsg" placeholder="Enter message">
-            <button ng-click="addChat()">Get!</button>
+            <!--<button ng-click="addChat()">Get!</button>--> <!--Shouldn't need this button anymore-->
         </main>
     </section>
 

@@ -1,7 +1,8 @@
 const app = angular.module('GameApp', [/**'luegg.directives'*//**'ngScrollGlue'*/]);
 
 app.controller('EventController', function ($scope, DemoService) {
-
+    // What is the purpose of this controller? To populate the "events" box with info from the back end that is
+    // related to gameplay info. This should happen automatically.
     $scope.startText = "You're standing in the center of a room with four walls surrounding you. How would you like to proceed?";
     DemoService.connect(function () {
         console.log("connect running!")
@@ -13,12 +14,6 @@ app.controller('EventController', function ($scope, DemoService) {
             console.log("events in the EventController: " + $scope.events);
         });
     });
-    // What is the purpose of this controller? To populate the "events" box with info from the back end that is
-    // related to gameplay info. This should happen automatically.
-    // $scope.addEvent = function () {
-    //     $scope.chats = DemoService.returnEvents();
-    //     console.log($scope.chats);
-    // }
 })
 
 app.controller('CursorController', function ($scope, DemoService) {
@@ -50,23 +45,28 @@ app.controller('CursorController', function ($scope, DemoService) {
 app.controller('CommandController', function ($scope, DemoService) {
     //The purpose of this controller is to handle validation of user input before submitting it
     $scope.terminal = "";
+    $scope.prompt = "What would you like to do?"
     $scope.command = function () {
-        // console.log($scope.terminal);
 
-        if ($scope.terminal === 'use') {
-            DemoService.action('use', 'something');
-        } else if ($scope.terminal === 'take') {
-            DemoService.action('take', 'something');
-        } else if ($scope.terminal === 'search') {
-            DemoService.action('search')
-        }
+        // console.log($scope.terminal);
+        // let splitter = $scope.terminal.split(" ")
+        // console.log(splitter);
+
+
+        // if ($scope.terminal === 'use') {
+        //     DemoService.action('use', 'something');
+        // } else if ($scope.terminal === 'take') {
+        //     DemoService.action('take', 'something');
+        // } else if ($scope.terminal === 'search') {
+        //     DemoService.action('search')
+        // }
 
 
         // if ('house' === 'cat' || 'boat' || 'car') {
 
         // }
         //  if ($scope.terminal !== "use" || $scope.terminal !== "take" || $scope.terminal !== "search" || $scope.terminal !== "inventory") {
-        //     console.log("Quit being not super smart. But still smart.")
+        //     console.log("Quit being stupid.")
         // } else {
         //     console.log($scope.terminal);
         //     DemoService.action($scope.terminal);
@@ -131,6 +131,7 @@ app.factory('DemoService', function ($http) {
                     console.log(response);
                     console.log(info.content);
                     events.push(info.content);
+                    // angular.copy()
 
                     // Reason: we need to do something every time a new message comes in, 
                     // specifically update the DOM.
@@ -157,6 +158,12 @@ app.factory('DemoService', function ($http) {
         returnEvents: function () {
             console.log(events);
             return events
+        },
+
+        addPrompt: function (thing) {
+            console.log(thing);
+            events.push(thing);
+            returnEvents();
         }
     }
 })
