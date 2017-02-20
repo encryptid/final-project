@@ -1,7 +1,5 @@
-package com.theironyard.EventChannel;
+package com.theironyard.models;
 
-import com.theironyard.models.Item;
-import com.theironyard.models.User;
 
 public class Command {
     private String type;

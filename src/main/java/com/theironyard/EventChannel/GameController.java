@@ -1,9 +1,6 @@
 package com.theironyard.EventChannel;
 
-import com.theironyard.models.Item;
-import com.theironyard.models.Room;
-import com.theironyard.models.StoryOutput;
-import com.theironyard.models.User;
+import com.theironyard.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.Message;
@@ -11,14 +8,10 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.socket.messaging.AbstractSubProtocolEvent;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 public class GameController {
@@ -33,15 +26,17 @@ public class GameController {
         switch (input.getType()) {
 
             case "chat":
-                template.convertAndSendToUser(sha.getSessionId(), "/", new StoryOutput(input.getValue(), new User(Room.players.get(sha.getSessionId()).getName())));
-                break;
+                template.convertAndSendToUser(sha.getSessionId(), "/", new StoryOutput(input.getValue(), Room.players.get(sha.getSessionId())));
+                for (String session : Room.players.keySet()) {
+                    if (session.equals(sha.getSessionId())) {
+                        continue;
+                    }
+                    break;
+                }
 
             case "take":
 
 
-                for (String session : Room.players.keySet()) {
-//                    template.convertAndSend("/user-input", new StoryOutput(input. + "has taken" + input.value));
-                }
 
                 // send to everyone else.
                 // for send to everyone, remove the if.
@@ -65,6 +60,7 @@ public class GameController {
         if (ev instanceof SessionConnectEvent) {
             System.out.println("Connect event [sessionId: " + sha.getSessionId() + "]");
             String name = sha.getNativeHeader("name").get(0);
+            System.out.println(name);
             Room.players.put(sha.getSessionId(), new User(sha.getSessionId(), name));
         } else if (ev instanceof SessionDisconnectEvent) {
             System.out.println("Disconnect Event: [sessionId: " + sha.getSessionId() + "]");
