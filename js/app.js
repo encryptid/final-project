@@ -4,16 +4,13 @@ app.controller('EventController', function ($scope, DemoService) {
     // What is the purpose of this controller? To populate the "events" box with info from the back end that is
     // related to gameplay info. This should happen automatically.
     $scope.startText = "You're standing in the center of a room with four walls surrounding you. How would you like to proceed?";
-    DemoService.connect(function () {
-        console.log("connect running!")
-        // Weird angular-magic. The $apply function tells angular that something is changing
-        // in the function that is going to be of interest to templates.
-        // 'Apply these updates to the template when they're done.'
-        $scope.$apply(function () {
-            $scope.events = DemoService.returnEvents();
-            console.log("events in the EventController: " + $scope.events);
-        });
-    });
+    
+    // $scope.$apply(function () {
+    //         $scope.events = DemoService.returnEvents();
+    //         console.log("events in the EventController: " + $scope.events);
+    //     });
+    
+    
 })
 
 app.controller('CursorController', function ($scope, DemoService) {
@@ -97,6 +94,22 @@ app.controller('ChatController', function ($scope, DemoService) {
     // The purpose of this controller is to manage the functions of the chat section.
     //New chats should be populated automatically without direct intervention
     
+    $scope.submitUser = function () {
+        // console.log($scope.name);
+        // let user = $scope.name;
+        // angular.copy(user, DemoService.newUser);
+        // DemoService.newUser = $scope.name;
+        // console.log(DemoService.newUser);
+        DemoService.connect($scope.name, function () {
+            console.log("connect running!")
+        // Weird angular-magic. The $apply function tells angular that something is changing
+        // in the function that is going to be of interest to templates.
+        // 'Apply these updates to the template when they're done.'
+            $scope.$apply(function () {
+                $scope.chats = DemoService.returnEvents();
+            });
+        });
+    }
     
     $scope.addChat = function () {
         // console.log($scope.chatBox);
@@ -120,6 +133,7 @@ app.controller('ChatController', function ($scope, DemoService) {
 
 app.factory('DemoService', function ($http) {
     const events = [];
+    let newUser = "";
 
     // const toad = new SockJS('http://192.168.1.22:8080/gamesock');
     // let client = null;
@@ -139,16 +153,17 @@ app.factory('DemoService', function ($http) {
     // });
 
     return {
-        connect: function (cb) {
+        connect: function (name, cb) {
+            // console.log(person);
             // const toad = new SockJS('https://fathomless-bastion-47154.herokuapp.com/gamesock');
             const toad = new SockJS('http://192.168.1.22:8080/gamesock');
             client = Stomp.over(toad);
 
             client.connect({
-                name: "Felix"
+                name: name,
             }, function () {
                 console.log('connected woohooo');
-                var urlparts = toad._transport.url.split("/");
+                let urlparts = toad._transport.url.split("/");
                 currentUser = urlparts[urlparts.length - 2];
 
                 // /user/[sessionId]/
@@ -157,9 +172,9 @@ app.factory('DemoService', function ($http) {
                     //second parameter is an arrow function with response as the parameter
                     const info = JSON.parse(response.body);
                     //assign the response to a variable called 'msg'
-                    console.log(response);
-                    console.log(info.content);
-                    events.push(info.content);
+                    // console.log(response);
+                    // console.log(info.content);
+                    events.push(info);
                     // angular.copy()
 
                     // Reason: we need to do something every time a new message comes in, 

@@ -56,13 +56,15 @@
 
     <section class="chat" ng-controller="ChatController">
         <main>
-            <input type="text" name="name" placeholder="Enter Name">
+            <input type="text" ng-model="name" name="name" placeholder="Enter Name">
+            <button ng-click="submitUser()">Start</button>
             <input type="text" name="channel" placeholder="DM">
             <div class="chatBody" ng-repeat="chat in chats track by $index"> <!-- added for testing -->
                 <ul>
                     <li>
                         <!--<p>From:</p>-->
-                        <p>{{ chat }}</p>
+                        <p>from:{{ chat.user.name }}</p>
+                        <p>msg:{{ chat.value}}</p>
                     </li>
                 </ul>
                 <!--<ul>
