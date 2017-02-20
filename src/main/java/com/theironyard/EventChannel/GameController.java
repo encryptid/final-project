@@ -15,6 +15,8 @@ import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 @Controller
 public class GameController {
+
+
     @Autowired
     SimpMessagingTemplate template;
 
@@ -26,7 +28,8 @@ public class GameController {
         switch (input.getType()) {
 
             case "chat":
-                template.convertAndSendToUser(sha.getSessionId(), "/", new StoryOutput(input.getValue(), Room.players.get(sha.getSessionId())));
+                // todo: needs to send to all users. test and if it doesnt work lets move into for loop
+                template.convertAndSendToUser(sha.getSessionId(), "/", new StoryOutput(input.getValue(), "chat", Room.players.get(sha.getSessionId())));
                 for (String session : Room.players.keySet()) {
                     if (session.equals(sha.getSessionId())) {
                         continue;
@@ -36,19 +39,30 @@ public class GameController {
 
             case "take":
 
+                System.out.println(input.getValue());
+                if(input.getValue().equals("peanuts")) {
+                    template.convertAndSendToUser(sha.getSessionId(), "/", new StoryOutput(Item.peanuts.getTakeText(), "event", Room.players.get(sha.getSessionId())));
 
 
-                // send to everyone else.
-                // for send to everyone, remove the if.
-                for (String session : Room.players.keySet()) {
-                    if (session.equals(sha.getSessionId())) {
-                        continue;
-                    }
-
-                    template.convertAndSendToUser(session, "/", input);
                 }
+                break;
+
+
+
+
+
+            // send to everyone else.
+                // for send to everyone, remove the if.
+//                for (String session : Room.players.keySet()) {
+//                    if (session.equals(sha.getSessionId())) {
+//                        continue;
+//                    }
+//
+//                    template.convertAndSendToUser(session, "/", input);
+//                }
 
             default:
+                System.out.println("Unrecognized message!");
 
         }
     }

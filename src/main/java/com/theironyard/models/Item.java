@@ -1,7 +1,7 @@
 package com.theironyard.models;
 
 
-import com.theironyard.GameApplication;
+import java.util.ArrayList;
 
 public class Item {
     private String name;
@@ -10,6 +10,9 @@ public class Item {
     private String searchText;
     private boolean isTaken;
     private boolean isUsed;
+
+
+
 
     public Item(String name, String takeText, String useText, String searchText, boolean isTaken, boolean isUsed) {
         this.name = name;
@@ -68,15 +71,11 @@ public class Item {
         isUsed = used;
     }
 
-    public Item peanuts = new Item("peanuts", "You have the peanuts!",
+
+
+    public static Item peanuts = new Item("peanuts", "You have the peanuts!",
             "Mmmm peanuts!",
             "Just some peanuts",
             false, false);
-
-   //GameApplication.room.items.
-
-
-
-
 }
 
