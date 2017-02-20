@@ -38,24 +38,26 @@ app.controller('CursorController', function ($scope, DemoService) {
 app.controller('CommandController', function ($scope, DemoService) {
     //The purpose of this controller is to handle validation of user input before submitting it
     $scope.terminal = "";
-    $scope.prompt = "Input action"
+    $scope.prompt = "Input action";
+    $scope.objPrompt = "Input item";
     $scope.command = function () {
-        let type = "";
-        let value = "";
+        // let type = "";
+        // let value = "";
         if ($scope.terminal === "take") {
-            type = $scope.terminal
+            DemoService.action($scope.terminal, $scope.objSelect)
+                console.log("command is running");
+            // type = $scope.terminal;
+            // value = $scope.objSelect;
             $scope.terminal = "";
-            $scope.prompt = "Take which item?"
-            let btn = document.querySelector(".select");
-            btn.addEventListener('click', function() {
-                value = $scope.terminal
-                console.log(type, value);
-                console.log($scope.prompt);
-                $scope.prompt = "Input action";
-                return $scope.terminal = "";
+            $scope.objSelect = "";
+            let  results = DemoService.returnEvents();
+            console.log(results);
+            
+                // $scope.$apply(function () {
+                //     $scope.chats = DemoService.returnEvents();
+                // });
                 //current hurdle: after the item is submitted, the textbox does not clear and reset the placeholder
                 //I think my current method is not ideally suited for this application.
-            });
         } else if ($scope.terminal === "use") {
             type = $scope.terminal
         } else if ($scope.terminal === "search") {
@@ -192,6 +194,7 @@ app.factory('DemoService', function ($http) {
             client.send('/game/user-input', {}, JSON.stringify(movement));
         },
         action: function (action, target) {
+            console.log(action + ' and ' + target + ' are coming through the action function!');
             let command = {
                 type: action,
                 value: target
@@ -205,6 +208,7 @@ app.factory('DemoService', function ($http) {
             }
 
             client.send('/game/user-input', {}, JSON.stringify(chat));
+            
         },
 
         returnEvents: function () {
