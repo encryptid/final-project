@@ -1,0 +1,85 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Tablow</title>
+    <!-- add css file -->
+    <link rel="stylesheet" href="style.css">
+    <!-- add js file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+    <!--<script src="/components/ng-scroll-glue/dist/scrollglue.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-scroll-glue/2.2.0/scrollglue.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-scroll-glue/2.2.0/scrollglue.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+    <script src="app.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
+
+
+</head>
+
+<body ng-app="GameApp">
+    <h1>TaBlow</h1>
+    <section class="eventBox" ng-controller="EventController" scroll-glue>
+        <ul>
+            <li>{{ startText }}</li>
+            <li ng-repeat="event in events track by $index">{{ event }}</li>
+        </ul>
+    </section>
+
+    <div class="command">
+       
+        <!--<div class="cursor" ng-controller="CursorController">
+            <h2>Move:</h2>
+            <button id="upBtn" ng-click="up()">Up</button>
+            <div id="sides">
+                <div id="left">
+                    <button id="leftBtn" ng-click="left()">Left</button>
+                </div>
+                <div id="right">
+                    <button id="rightBtn" ng-click="right()">Right</button>
+                </div>
+            </div>
+            <button id="downBtn" ng-click="down()">Down</button>
+        </div>-->
+
+        <section class="prompt" ng-controller="CommandController">
+            <div id="one"></div>
+            <div>
+            <input type="text" name="choice" ng-model="terminal" placeholder="{{ prompt }}">
+            <input type="text" name="object" ng-model="objSelect" placeholder = "{{ objPrompt }}">
+            <button ng-click="command()" class="select">Enter</button>
+            </div>
+            <div id="two"></div>
+        </section>
+    </div>
+
+    <section class="chat" ng-controller="ChatController">
+        <main>
+            <input type="text" ng-model="name" name="name" placeholder="Enter Name">
+            <button ng-click="submitUser()">Start</button>
+            <!--<input type="text" name="channel" placeholder="DM">-->
+            <div class="chatBody" ng-repeat="chat in chats track by $index"> <!-- added for testing -->
+                <ul>
+                    <li>
+                        <!--<p>From:</p>-->
+                        <p>from:{{ chat.user.name }}</p>
+                        <p>msg:{{ chat.value}}</p>
+                    </li>
+                </ul>
+                <!--<ul>
+                    <li>
+                        <p>From:</p>
+                        <p>Msg: More chat</p>
+                    </li>
+                </ul>-->
+            </div>
+            <input type="text" ng-model="chatBox" name="enterMsg" placeholder="Enter message">
+            <button ng-click="addChat()">Submit</button>
+        </main>
+    </section>
+
+</body>
+
+</html>

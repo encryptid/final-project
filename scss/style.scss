@@ -1,0 +1,125 @@
+@import '../node_modules/foundation-sites/scss/foundation';
+
+@include foundation-global-styles;
+@include foundation-grid;
+
+body {
+    @include grid-row();
+    text-align: center;
+    background-color: black;
+    color: #00FF00;
+    font-size: 1.75em;
+    font-family: 'VT323', monospace;
+
+    h1 {
+        color: black;
+        background-color: #00FF00;
+        margin: 0;
+        font-size: 1em;
+    }
+
+    p {
+        // margin: auto 0;
+        border: 2px solid #00ff00;
+        border-radius: 5px;
+    }
+    
+    button {
+        //@include grid-column(4);
+        border: 1px solid #00ff00;
+        // border: none;
+        border-radius: 5px;
+        // width: 100px;
+        color: #00ff00;
+        background-color: black;
+        font-family: 'VT323', monospace; 
+    }
+
+    input {
+            background-color: black;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            font-family: 'VT323', monospace; 
+        }
+// ::-webkit-scrollbar-track {
+//             color: #00FF00;
+//             background-color: #00FF00;
+//             border-radius: 10px;
+//         }
+// ::-webkit-scrollbar-track-piece {
+//             color: #00FF00;
+//             background-color: #00FF00;
+//          }
+
+    .eventBox {
+        text-align: left;
+        border: 1px solid #00ff00;
+        height: 250px;
+        overflow-y: scroll;
+        // scrollbar-base-color: #00ff00;
+
+        ul {
+            list-style-type: square;
+            // list-style: none;
+        }
+    }
+
+    .command {
+        border: 1px solid #00FF00;
+        // height: 350px;
+
+        // .cursor {
+        //     width: 300px;
+        //     @include grid-column(6);
+        //     border: 1px solid #00FF00;
+        //     // margin: 0 auto;
+        //     // padding-left: 0;
+
+        //      h2 {
+        //         margin: 0;
+        //         border: 1px solid #00FF00;
+        //         background-color: #00FF00;
+        //         color: black;
+        //     }
+
+        //     .sides {
+        //         @include grid-row();
+        //         // height: 100px;
+        //         width: 500px;
+        //         // #up {
+        //         //     @include grid-column(12);
+        //         //     width: 100px;
+        //         }
+        //         #left, #right {
+        //             @include grid-column(6);
+        //         }
+        // }
+
+        .prompt {
+            // @include grid-column(6);
+            border: 1px solid #00FF00;
+            height: 100px;
+
+            #one {
+                height: 33px;
+            }
+
+            #two {
+                height: 33px;
+            }
+        }
+}
+
+    .chat {
+        @include grid-column(12);
+        text-align: left;
+        border: 2px solid #00ff00;
+        height: 350px;
+
+        .chatbody {
+            height: 250px;
+            border: 2px solid #00FF00;
+        }
+
+    }
+}
