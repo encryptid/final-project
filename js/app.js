@@ -71,7 +71,7 @@ app.controller('CommandController', function ($scope, GameService) {
                     return false
                 }
             } else {
-                console.log("Sorry, that's not a valid command");
+                console.log("Sorry, that's not a valid command.");
                 return false
             }
 
@@ -85,8 +85,18 @@ app.controller('CommandController', function ($scope, GameService) {
                 return true
             }
         }
+
+        function send () {
+                    let actLower = $scope.terminal.toLowerCase();
+                    let action = actLower.trim();
+                    let itemLower = $scope.objSelect.toLowerCase();
+                    let item = itemLower.trim();
+                    GameService.action(action, item)
+                }
+
             if (isAction() && isItem()) {
                 console.log("Run command thinger!");
+                send();    
             }
         }
 
