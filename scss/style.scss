@@ -1,5 +1,3 @@
-/* Include Foundation! */
-
 @import '../node_modules/foundation-sites/scss/foundation';
 
 @include foundation-global-styles;
@@ -54,13 +52,15 @@ body {
 //          }
 
     .eventBox {
+        text-align: left;
         border: 1px solid #00ff00;
         height: 250px;
         overflow-y: scroll;
         // scrollbar-base-color: #00ff00;
 
         ul {
-            list-style: none;
+            list-style-type: square;
+            // list-style: none;
         }
     }
 
@@ -114,8 +114,12 @@ body {
         @include grid-column(12);
         text-align: left;
         border: 2px solid #00ff00;
-        height: 250px;
+        height: 350px;
 
-        
+        .chatbody {
+            height: 250px;
+            border: 2px solid #00FF00;
+        }
+
     }
 }
