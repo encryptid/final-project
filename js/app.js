@@ -39,33 +39,85 @@ app.controller('CursorController', function ($scope, GameService) {
 app.controller('CommandController', function ($scope, GameService) {
     //The purpose of this controller is to handle validation of user input before submitting it
     $scope.terminal = "";
+    $scope.objSelect = "";
     $scope.prompt = "Input action";
     $scope.objPrompt = "Input item";
+    let check = new RegExp('^[a-zA-Z][a-zA-Z][a-zA-Z]+');
+
     $scope.command = function () {
-        if ($scope.terminal === "take") {
-            $scope.objPrompt = "Take what?"
-            GameService.action($scope.terminal, $scope.objSelect)
-                console.log("command is running");
-            // type = $scope.terminal;
-            // value = $scope.objSelect;
-            $scope.terminal = "";
-            $scope.objSelect = "";
-            let  results = GameService.returnChats();
-            console.log(results);
-            $scope.objPrompt = "Input item";
-            
-                // $scope.$apply(function () {
-                //     $scope.chats = GameService.returnEvents();
-                // });
-                //current hurdle: after the item is submitted, the textbox does not clear and reset the placeholder
-                //I think my current method is not ideally suited for this application.
-        } else if ($scope.terminal === "use") {
-            type = $scope.terminal
-        } else if ($scope.terminal === "search") {
-            type = $scope.terminal
-        } else if ($scope.terminal === "inventory") {
-            type = $scope.terminal
+        // if (isAction() && isItem()) {
+            // GameService.action(entry, thing)
+        // }
+
+        function isAction() {
+            let lower = $scope.terminal.toLowerCase();
+            let entry = lower.trim();
+            console.log(entry);
+            if (check.test(entry) === true) {
+                if (entry === "take") {
+                    console.log("it's take!")
+                    return true
+                } else if (entry === "search") {
+                    console.log("it's search!")
+                    return true
+                } else if (entry === "use") {
+                    console.log("it's use!")
+                    return true
+                } else if (entry === "help") {
+                    console.log("it's help!")
+                    return true
+                } else {
+                    console.log("it's not a command...")
+                    return false
+                }
+            } else {
+                console.log("Sorry, that's not a valid command");
+                return false
+            }
+
+
+            }
+
+        function isItem() {
+            let lower = $scope.objSelect.toLowerCase();
+            let entry = lower.trim();
+            if (check.test(entry) === true) {
+                return true
+            }
         }
+            if (isAction() && isItem()) {
+                console.log("Run command thinger!");
+            }
+        }
+
+        // if ( check.test($scope.terminal) === true) {
+        //     let lower = $scope.terminal.toLowerCase();
+        //     let entry = lower.trim();
+        //     console.log(entry);
+        //     if (entry === "take") {
+        //         $scope.objPrompt = "Take what?"
+        //         GameService.action($scope.terminal, $scope.objSelect)
+        //             console.log("command is running");
+        //         // type = $scope.terminal;
+        //         // value = $scope.objSelect;
+        //         $scope.terminal = "";
+        //         $scope.objSelect = "";
+        //         let results = GameService.returnChats();
+        //         console.log(results);
+        //         $scope.objPrompt = "Input item";
+                
+        //             // $scope.$apply(function () {
+        //             //     $scope.chats = GameService.returnEvents();
+        //             // });
+        //             //current hurdle: after the item is submitted, the textbox does not clear and reset the placeholder
+        //             //I think my current method is not ideally suited for this application.
+        //     } else if ($scope.terminal === "use") {
+        //         type = $scope.terminal
+        //     } else if ($scope.terminal === "search") {
+        //         type = $scope.terminal
+        //     } else if ($scope.terminal === "inventory") {
+        //         type = $scope.terminal
+        //     }
         // console.log($scope.terminal);
         // let splitter = $scope.terminal.split(" ")
         // console.log(splitter);
@@ -89,7 +141,7 @@ app.controller('CommandController', function ($scope, GameService) {
         //     console.log($scope.terminal);
         //     GameService.action($scope.terminal);
         // }
-    }
+    // }
 
 });
 
@@ -109,7 +161,7 @@ app.controller('ChatController', function ($scope, GameService) {
         // in the function that is going to be of interest to templates.
         // 'Apply these updates to the template when they're done.'
             $scope.$apply(function () {
-                $scope.chats = GameService.returnEvents();
+                $scope.chats = GameService.returnChats();
             });
         });
     }
@@ -136,7 +188,7 @@ app.controller('ChatController', function ($scope, GameService) {
 
 app.factory('GameService', function ($http) {
     const events = [];
-    const chats = []
+    const chats = [];
     let newUser = "";
 
     // const toad = new SockJS('http://192.168.1.22:8080/gamesock');
@@ -178,11 +230,11 @@ app.factory('GameService', function ($http) {
                     //assign the response to a variable called 'info'
                     // console.log(response);
 
-                    // if (info.body.user.thing === "chat") {
-                    events.push(info);
-                    // } else if (info.body.user.thing === "event") {
-                    //     chats.push(info);
-                    // };
+                    if (info.type === "chat") {
+                        chats.push(info);
+                    } else if (info.type === "event") {
+                        events.push(info.value);
+                    };
                     // angular.copy()
 
                     // Reason: we need to do something every time a new message comes in, 
