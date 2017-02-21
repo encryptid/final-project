@@ -1,8 +1,6 @@
 package com.theironyard.models;
 
 
-import java.util.ArrayList;
-
 public class Item {
     private String name;
     private String takeText;
@@ -12,8 +10,6 @@ public class Item {
     private boolean isUsed;
 
 
-
-
     public Item(String name, String takeText, String useText, String searchText, boolean isTaken, boolean isUsed) {
         this.name = name;
         this.takeText = takeText;
@@ -21,6 +17,8 @@ public class Item {
         this.searchText = searchText;
         this.isTaken = isTaken;
         this.isUsed = isUsed;
+
+
     }
 
     public String getName() {
@@ -77,5 +75,13 @@ public class Item {
             "Mmmm peanuts!",
             "Just some peanuts",
             false, false);
+
+    public static void createRoomItems(){
+
+        Room.items.add(peanuts);
+    }
+
+
+
 }
 
