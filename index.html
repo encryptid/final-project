@@ -20,7 +20,7 @@
 </head>
 
 <body ng-app="GameApp">
-    <h1>TaBlow</h1>
+    <h1>Tablow</h1>
     <section class="eventBox" ng-controller="EventController">
         <ul>
             <li>{{ startText }}</li>
@@ -47,7 +47,7 @@
         <section class="prompt" ng-controller="CommandController">
             <div id="one"></div>
             <div>
-            <input type="text" name="choice" ng-model="terminal" placeholder="{{ prompt }}">
+            <input type="text" class="choice" name="choice" ng-model="terminal" placeholder="{{ prompt }}">
             <input type="text" name="object" ng-model="objSelect" placeholder = "{{ objPrompt }}">
             <button ng-click="command()" class="select">Enter</button>
             </div>
@@ -64,8 +64,7 @@
                 <ul ng-repeat="chat in chats track by $index">
                     <li>
                         <!--<p>From:</p>-->
-                        <p>from:{{ chat.user.name }}</p>
-                        <p>msg:{{ chat.value}}</p>
+                        <p><span id="name"> {{ chat.user.name }}</span> {{ chat.value}}</p>
                     </li>
                 </ul>
                 <!--<ul>

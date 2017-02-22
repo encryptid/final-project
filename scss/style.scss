@@ -120,6 +120,18 @@ body {
             height: 250px;
             border: 2px solid #00FF00;
             overflow-y: scroll;
+
+            p {
+                border: none;
+            
+
+            #name {
+                border-radius: 5px;
+                color: white;
+                background-color: #FF00FF;
+                padding: 5px;
+            }
+        }
         }
 
     }
