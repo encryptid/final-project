@@ -82,15 +82,16 @@ app.controller('CommandController', function ($scope, GameService) {
                 } else if (entry === "use") {
                     console.log("it's use!")
                     return true
-                } else if (entry === "help") {
-                    console.log("it's help!")
+                } else if (entry === "get") {
+                    console.log("it's get!")
                     return true
                 } else {
                     console.log("it's not a command...")
+                    GameService.addEvent("Sorry, that's not a valid command.");
                     return false
                 }
             } else {
-                console.log("Sorry, that's not a valid command.");
+                GameService.addEvent("Sorry, that's not a valid command.");
                 return false
             };
 
@@ -180,8 +181,9 @@ app.controller('CommandController', function ($scope, GameService) {
 app.controller('ChatController', function ($scope, GameService, $timeout) {
     // The purpose of this controller is to manage the functions of the chat section.
     //New chats should be populated automatically without direct intervention
-
+        
     $scope.submitUser = function () {
+        GameService.addEvent("You have successfully logged in.");
         // console.log($scope.name);
         // let user = $scope.name;
         // angular.copy(user, GameService.newUser);
@@ -189,7 +191,7 @@ app.controller('ChatController', function ($scope, GameService, $timeout) {
         // console.log(GameService.newUser);
         GameService.connect($scope.name, function () {
             console.log("connect running!");
-            GameService.returnEvents();
+            // GameService.returnEvents();
 
             // Weird angular-magic. The $apply function tells angular that something is changing
             // in the function that is going to be of interest to templates.
@@ -212,8 +214,7 @@ app.controller('ChatController', function ($scope, GameService, $timeout) {
         // console.log($scope.chatBox);
         GameService.chat($scope.chatBox);
         $scope.chatBox = "";
-        
-        // this one isn't scrolling properly for some reason.
+
     }
 
     //when the heroku endpoint for chats becomes available, create a new connect function for chats and uncomment 
@@ -321,10 +322,10 @@ app.factory('GameService', function ($http) {
             return chats
         },
 
-        addPrompt: function (thing) {
-            console.log(thing);
-            events.push(thing);
-            returnEvents();
+        addEvent: function (message) {
+            events.push(message);
+            console.log(events);
+            // returnEvents();
         },
     }
 });
