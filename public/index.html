@@ -24,6 +24,7 @@
     <section class="eventBox" ng-controller="EventController">
         <ul>
             <li>{{ startText }}</li>
+            <!--<li>{{ logConf }}</li>-->
             <li ng-repeat="event in events track by $index">{{ event }}</li>
         </ul>
     </section>

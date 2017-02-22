@@ -180,8 +180,9 @@ app.controller('CommandController', function ($scope, GameService) {
 app.controller('ChatController', function ($scope, GameService, $timeout) {
     // The purpose of this controller is to manage the functions of the chat section.
     //New chats should be populated automatically without direct intervention
-
+        
     $scope.submitUser = function () {
+        GameService.login();
         // console.log($scope.name);
         // let user = $scope.name;
         // angular.copy(user, GameService.newUser);
@@ -189,7 +190,7 @@ app.controller('ChatController', function ($scope, GameService, $timeout) {
         // console.log(GameService.newUser);
         GameService.connect($scope.name, function () {
             console.log("connect running!");
-            GameService.returnEvents();
+            // GameService.returnEvents();
 
             // Weird angular-magic. The $apply function tells angular that something is changing
             // in the function that is going to be of interest to templates.
@@ -212,8 +213,7 @@ app.controller('ChatController', function ($scope, GameService, $timeout) {
         // console.log($scope.chatBox);
         GameService.chat($scope.chatBox);
         $scope.chatBox = "";
-        
-        // this one isn't scrolling properly for some reason.
+
     }
 
     //when the heroku endpoint for chats becomes available, create a new connect function for chats and uncomment 
@@ -276,6 +276,7 @@ app.factory('GameService', function ($http) {
                         chats.push(info);
                     } else if (info.type === "event") {
                         events.push(info.value);
+                        console.log(events);
                     };
                     // angular.copy()
 
@@ -321,10 +322,10 @@ app.factory('GameService', function ($http) {
             return chats
         },
 
-        addPrompt: function (thing) {
-            console.log(thing);
-            events.push(thing);
-            returnEvents();
+        login: function () {
+            events.push("You have successfully logged in.");
+            console.log(events);
+            // returnEvents();
         },
     }
 });
