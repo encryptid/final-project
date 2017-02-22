@@ -1,17 +1,34 @@
 const app = angular.module('GameApp', [/**'luegg.directives'*//**'ngScrollGlue'*/]);
 
-app.controller('EventController', function ($scope, GameService) {
+app.controller('EventController', function ($scope, GameService, $timeout) {
     // What is the purpose of this controller? To populate the "events" box with info from the back end that is
     // related to gameplay info. This should happen automatically.
-    $scope.startText = "You're standing in the center of a room with four walls surrounding you. How would you like to proceed?";
-    
+    $scope.startText = "Please enter your name below."
+
+    // $scope.startText = "You're standing in the center of a room with four walls surrounding you. How would you like to proceed?";
+
     $scope.events = GameService.returnEvents();
+
+    /**
+     * When $scope.events changes, we need to scroll down to the bottom.
+     * 
+     * $watchCollection is actually getting called before the changes to 
+     * the array occur, so we need to use $timeout to put off the scrolling
+     * until RIGHT AFTER the collection is updated.
+     */
+    $scope.$watchCollection('events', function () {
+        $timeout(function () {
+            let evtBox = document.querySelector(".eventBox");
+            evtBox.scrollTop = evtBox.scrollHeight + 100;
+        }, 0);
+    });
+
     // $scope.$apply(function () {
     //         $scope.events = GameService.returnEvents();
     //         console.log("events in the EventController: " + $scope.events);
     //     });
-    
-    
+
+
 })
 
 app.controller('CursorController', function ($scope, GameService) {
@@ -43,10 +60,12 @@ app.controller('CommandController', function ($scope, GameService) {
     $scope.prompt = "Input action";
     $scope.objPrompt = "Input item";
     let check = new RegExp('^[a-zA-Z][a-zA-Z][a-zA-Z]+');
+    let choice = document.querySelector('.choice');
+
 
     $scope.command = function () {
         // if (isAction() && isItem()) {
-            // GameService.action(entry, thing)
+        // GameService.action(entry, thing)
         // }
 
         function isAction() {
@@ -55,7 +74,7 @@ app.controller('CommandController', function ($scope, GameService) {
             console.log(entry);
             if (check.test(entry) === true) {
                 if (entry === "take") {
-                    console.log("it's take!")
+                    console.log("it's take!");
                     return true
                 } else if (entry === "search") {
                     console.log("it's search!")
@@ -73,92 +92,95 @@ app.controller('CommandController', function ($scope, GameService) {
             } else {
                 console.log("Sorry, that's not a valid command.");
                 return false
-            }
+            };
 
 
-            }
+        };
 
         function isItem() {
             let lower = $scope.objSelect.toLowerCase();
             let entry = lower.trim();
             if (check.test(entry) === true) {
                 return true
-            }
-        }
+            };
+        };
 
-        function send () {
-                    let actLower = $scope.terminal.toLowerCase();
-                    let action = actLower.trim();
-                    let itemLower = $scope.objSelect.toLowerCase();
-                    let item = itemLower.trim();
-                    GameService.action(action, item)
-                }
+        function send() {
+            let actLower = $scope.terminal.toLowerCase();
+            let action = actLower.trim();
+            let itemLower = $scope.objSelect.toLowerCase();
+            let item = itemLower.trim();
+            GameService.action(action, item);
+            $scope.terminal = "";
+            $scope.objSelect = "";
+        };
 
-            if (isAction() && isItem()) {
-                console.log("Run command thinger!");
-                send();    
-            }
-        }
+        if (isAction() && isItem()) {
+            console.log("Run command thinger!");
+            send();
+        };
+        // A BIG ANNOYING THING: the bottom of the element is partially hidden by the top of the div under it.
+    };
 
-        // if ( check.test($scope.terminal) === true) {
-        //     let lower = $scope.terminal.toLowerCase();
-        //     let entry = lower.trim();
-        //     console.log(entry);
-        //     if (entry === "take") {
-        //         $scope.objPrompt = "Take what?"
-        //         GameService.action($scope.terminal, $scope.objSelect)
-        //             console.log("command is running");
-        //         // type = $scope.terminal;
-        //         // value = $scope.objSelect;
-        //         $scope.terminal = "";
-        //         $scope.objSelect = "";
-        //         let results = GameService.returnChats();
-        //         console.log(results);
-        //         $scope.objPrompt = "Input item";
-                
-        //             // $scope.$apply(function () {
-        //             //     $scope.chats = GameService.returnEvents();
-        //             // });
-        //             //current hurdle: after the item is submitted, the textbox does not clear and reset the placeholder
-        //             //I think my current method is not ideally suited for this application.
-        //     } else if ($scope.terminal === "use") {
-        //         type = $scope.terminal
-        //     } else if ($scope.terminal === "search") {
-        //         type = $scope.terminal
-        //     } else if ($scope.terminal === "inventory") {
-        //         type = $scope.terminal
-        //     }
-        // console.log($scope.terminal);
-        // let splitter = $scope.terminal.split(" ")
-        // console.log(splitter);
+    // if ( check.test($scope.terminal) === true) {
+    //     let lower = $scope.terminal.toLowerCase();
+    //     let entry = lower.trim();
+    //     console.log(entry);
+    //     if (entry === "take") {
+    //         $scope.objPrompt = "Take what?"
+    //         GameService.action($scope.terminal, $scope.objSelect)
+    //             console.log("command is running");
+    //         // type = $scope.terminal;
+    //         // value = $scope.objSelect;
+    //         $scope.terminal = "";
+    //         $scope.objSelect = "";
+    //         let results = GameService.returnChats();
+    //         console.log(results);
+    //         $scope.objPrompt = "Input item";
 
-
-        // if ($scope.terminal === 'use') {
-        //     GameService.action('use', 'something');
-        // } else if ($scope.terminal === 'take') {
-        //     GameService.action('take', 'something');
-        // } else if ($scope.terminal === 'search') {
-        //     GameService.action('search')
-        // }
+    //             // $scope.$apply(function () {
+    //             //     $scope.chats = GameService.returnEvents();
+    //             // });
+    //             //current hurdle: after the item is submitted, the textbox does not clear and reset the placeholder
+    //             //I think my current method is not ideally suited for this application.
+    //     } else if ($scope.terminal === "use") {
+    //         type = $scope.terminal
+    //     } else if ($scope.terminal === "search") {
+    //         type = $scope.terminal
+    //     } else if ($scope.terminal === "inventory") {
+    //         type = $scope.terminal
+    //     }
+    // console.log($scope.terminal);
+    // let splitter = $scope.terminal.split(" ")
+    // console.log(splitter);
 
 
-        // if ('house' === 'cat' || 'boat' || 'car') {
+    // if ($scope.terminal === 'use') {
+    //     GameService.action('use', 'something');
+    // } else if ($scope.terminal === 'take') {
+    //     GameService.action('take', 'something');
+    // } else if ($scope.terminal === 'search') {
+    //     GameService.action('search')
+    // }
 
-        // }
-        //  if ($scope.terminal !== "use" || $scope.terminal !== "take" || $scope.terminal !== "search" || $scope.terminal !== "inventory") {
-        //     console.log("Quit being stupid.")
-        // } else {
-        //     console.log($scope.terminal);
-        //     GameService.action($scope.terminal);
-        // }
+
+    // if ('house' === 'cat' || 'boat' || 'car') {
+
+    // }
+    //  if ($scope.terminal !== "use" || $scope.terminal !== "take" || $scope.terminal !== "search" || $scope.terminal !== "inventory") {
+    //     console.log("Quit being stupid.")
+    // } else {
+    //     console.log($scope.terminal);
+    //     GameService.action($scope.terminal);
+    // }
     // }
 
 });
 
-app.controller('ChatController', function ($scope, GameService) {
+app.controller('ChatController', function ($scope, GameService, $timeout) {
     // The purpose of this controller is to manage the functions of the chat section.
     //New chats should be populated automatically without direct intervention
-    
+
     $scope.submitUser = function () {
         // console.log($scope.name);
         // let user = $scope.name;
@@ -166,22 +188,32 @@ app.controller('ChatController', function ($scope, GameService) {
         // GameService.newUser = $scope.name;
         // console.log(GameService.newUser);
         GameService.connect($scope.name, function () {
-            console.log("connect running!")
-        // Weird angular-magic. The $apply function tells angular that something is changing
-        // in the function that is going to be of interest to templates.
-        // 'Apply these updates to the template when they're done.'
+            console.log("connect running!");
+            GameService.returnEvents();
+
+            // Weird angular-magic. The $apply function tells angular that something is changing
+            // in the function that is going to be of interest to templates.
+            // 'Apply these updates to the template when they're done.'
             $scope.$apply(function () {
                 $scope.chats = GameService.returnChats();
             });
         });
     }
-    
+    $scope.chats = GameService.returnChats();
+
+    $scope.$watchCollection('chats', function () {
+        $timeout(function () {
+            let chatty = document.querySelector(".chatBody");
+            chatty.scrollTop = chatty.scrollHeight;
+        }, 0);
+    });
+
     $scope.addChat = function () {
         // console.log($scope.chatBox);
         GameService.chat($scope.chatBox);
         $scope.chatBox = "";
-
-        // $scope.chats = GameService.returnEvents();
+        
+        // this one isn't scrolling properly for some reason.
     }
 
     //when the heroku endpoint for chats becomes available, create a new connect function for chats and uncomment 
@@ -269,14 +301,14 @@ app.factory('GameService', function ($http) {
             };
             client.send('/game/user-input', {}, JSON.stringify(command));
         },
-        chat: function(msg) {
+        chat: function (msg) {
             let chat = {
                 type: 'chat',
                 value: msg
             }
 
             client.send('/game/user-input', {}, JSON.stringify(chat));
-            
+
         },
 
         returnEvents: function () {
