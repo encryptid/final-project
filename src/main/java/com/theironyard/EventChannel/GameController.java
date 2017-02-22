@@ -35,6 +35,12 @@ public class GameController {
             Room.players.remove(sha.getSessionId());
         } else if (ev instanceof SessionSubscribeEvent) {
             System.out.println("Client Channel Subscription");
+            StoryOutput intro = new StoryOutput("Intro text", "event", Room.players.get(sha.getSessionId()));
+            broadcastToSingleUser(intro);
+            StoryOutput joined = new StoryOutput("A new player has joined the game!\n" +
+                    "Send them a message with the box below","event", Room.players.get(sha.getSessionId()));
+            broadcastToOtherUsers(joined);
+
         } else {
             System.out.println("Other Event:" + ev.getClass());
         }
