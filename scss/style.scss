@@ -116,9 +116,10 @@ body {
         border: 2px solid #00ff00;
         height: 350px;
 
-        .chatbody {
+        .chatBody {
             height: 250px;
             border: 2px solid #00FF00;
+            overflow-y: scroll;
         }
 
     }

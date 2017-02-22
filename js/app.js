@@ -73,32 +73,35 @@ app.controller('CommandController', function ($scope, GameService) {
             } else {
                 console.log("Sorry, that's not a valid command.");
                 return false
-            }
+            };
 
 
-            }
+            };
 
         function isItem() {
             let lower = $scope.objSelect.toLowerCase();
             let entry = lower.trim();
             if (check.test(entry) === true) {
                 return true
-            }
-        }
+            };
+        };
 
         function send () {
                     let actLower = $scope.terminal.toLowerCase();
                     let action = actLower.trim();
                     let itemLower = $scope.objSelect.toLowerCase();
                     let item = itemLower.trim();
-                    GameService.action(action, item)
-                }
+                    GameService.action(action, item);
+                };
 
             if (isAction() && isItem()) {
                 console.log("Run command thinger!");
                 send();    
-            }
-        }
+            };
+            let evtBox = document.querySelector(".eventBox");
+            evtBox.scrollTop = evtBox.scrollHeight;
+            // A BIG ANNOYING THING: the bottom of the element is partially hidden by the top of the div under it.
+        };
 
         // if ( check.test($scope.terminal) === true) {
         //     let lower = $scope.terminal.toLowerCase();
@@ -180,8 +183,9 @@ app.controller('ChatController', function ($scope, GameService) {
         // console.log($scope.chatBox);
         GameService.chat($scope.chatBox);
         $scope.chatBox = "";
-
-        // $scope.chats = GameService.returnEvents();
+        let chatty = document.querySelector(".chatBody");
+            chatty.scrollTop = chatty.scrollHeight;
+            // this one doesn't really work at all for some reason.
     }
 
     //when the heroku endpoint for chats becomes available, create a new connect function for chats and uncomment 

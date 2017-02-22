@@ -21,7 +21,7 @@
 
 <body ng-app="GameApp">
     <h1>TaBlow</h1>
-    <section class="eventBox" ng-controller="EventController" scroll-glue>
+    <section class="eventBox" ng-controller="EventController">
         <ul>
             <li>{{ startText }}</li>
             <li ng-repeat="event in events track by $index">{{ event }}</li>
@@ -60,9 +60,8 @@
             <input type="text" ng-model="name" name="name" placeholder="Enter Name">
             <button ng-click="submitUser()">Start</button>
             <section class="chatBody">
-            <!--<input type="text" name="channel" placeholder="DM">-->
-            <div ng-repeat="chat in chats track by $index"> <!-- added for testing -->
-                <ul>
+            <!--<input type="text" name="channel" placeholder="DM">--> <!-- added for testing -->
+                <ul ng-repeat="chat in chats track by $index">
                     <li>
                         <!--<p>From:</p>-->
                         <p>from:{{ chat.user.name }}</p>
@@ -75,7 +74,6 @@
                         <p>Msg: More chat</p>
                     </li>
                 </ul>-->
-            </div>
             </section>
             <input type="text" ng-model="chatBox" name="enterMsg" placeholder="Enter message">
             <button ng-click="addChat()">Submit</button>
