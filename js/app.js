@@ -82,15 +82,16 @@ app.controller('CommandController', function ($scope, GameService) {
                 } else if (entry === "use") {
                     console.log("it's use!")
                     return true
-                } else if (entry === "help") {
-                    console.log("it's help!")
+                } else if (entry === "get") {
+                    console.log("it's get!")
                     return true
                 } else {
                     console.log("it's not a command...")
+                    GameService.addEvent("Sorry, that's not a valid command.");
                     return false
                 }
             } else {
-                console.log("Sorry, that's not a valid command.");
+                GameService.addEvent("Sorry, that's not a valid command.");
                 return false
             };
 
@@ -182,7 +183,7 @@ app.controller('ChatController', function ($scope, GameService, $timeout) {
     //New chats should be populated automatically without direct intervention
         
     $scope.submitUser = function () {
-        GameService.login();
+        GameService.addEvent("You have successfully logged in.");
         // console.log($scope.name);
         // let user = $scope.name;
         // angular.copy(user, GameService.newUser);
@@ -276,7 +277,6 @@ app.factory('GameService', function ($http) {
                         chats.push(info);
                     } else if (info.type === "event") {
                         events.push(info.value);
-                        console.log(events);
                     };
                     // angular.copy()
 
@@ -322,8 +322,8 @@ app.factory('GameService', function ($http) {
             return chats
         },
 
-        login: function () {
-            events.push("You have successfully logged in.");
+        addEvent: function (message) {
+            events.push(message);
             console.log(events);
             // returnEvents();
         },
