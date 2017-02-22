@@ -255,8 +255,8 @@ app.factory('GameService', function ($http) {
     return {
         connect: function (name, cb) {
             // console.log(person);
-            const toad = new SockJS('https://fathomless-bastion-47154.herokuapp.com/gamesock');
-            // const toad = new SockJS('http://192.168.1.22:8080/gamesock');
+            // const toad = new SockJS('https://fathomless-bastion-47154.herokuapp.com/gamesock');
+            const toad = new SockJS('http://192.168.1.22:8080/gamesock');
             client = Stomp.over(toad);
 
             client.connect({
