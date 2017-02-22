@@ -324,7 +324,6 @@ app.factory('GameService', function ($http) {
 
         addEvent: function (message) {
             events.push(message);
-            console.log(events);
             // returnEvents();
         },
     }
