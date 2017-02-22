@@ -1,4 +1,3 @@
-/* Include Foundation! */
 /**
  * Foundation for Sites by ZURB
  * Version 6.3.0
@@ -1287,11 +1286,12 @@ body {
     border: 1px solid #00ff00;
     font-family: 'VT323', monospace; }
   body .eventBox {
+    text-align: left;
     border: 1px solid #00ff00;
     height: 250px;
     overflow-y: scroll; }
     body .eventBox ul {
-      list-style: none; }
+      list-style-type: square; }
   body .command {
     border: 1px solid #00FF00; }
     body .command .prompt {
@@ -1308,10 +1308,21 @@ body {
     padding-left: 0.625rem;
     text-align: left;
     border: 2px solid #00ff00;
-    height: 250px; }
+    height: 350px; }
     @media print, screen and (min-width: 40em) {
       body .chat {
         padding-right: 0.9375rem;
         padding-left: 0.9375rem; } }
     body .chat:last-child:not(:first-child) {
       float: right; }
+    body .chat .chatBody {
+      height: 250px;
+      border: 2px solid #00FF00;
+      overflow-y: scroll; }
+      body .chat .chatBody p {
+        border: none; }
+        body .chat .chatBody p #name {
+          border-radius: 5px;
+          color: white;
+          background-color: #FF00FF;
+          padding: 5px; }
