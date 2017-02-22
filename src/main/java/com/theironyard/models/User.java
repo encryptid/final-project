@@ -1,11 +1,12 @@
 package com.theironyard.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
     private String sessionId;
     public String name;
-    public static List<Item> inv;
+    public ArrayList<Item> inv = new ArrayList<>();
 
     public User() {}
 
@@ -36,9 +37,5 @@ public class User {
 
     public List<Item> getInv() {
         return inv;
-    }
-
-    public void setInv(List<Item> inv) {
-        this.inv = inv;
     }
 }

@@ -49,9 +49,11 @@ public class GameController {
 
             case "chat":
                 StoryOutput ChatOut = new StoryOutput(input.getValue(), "chat", Room.players.get(sha.getSessionId()));
-                broadcastToUsers(ChatOut);
+                broadcastToOtherUsers(ChatOut);
+                broadcastToSingleUser(ChatOut);
+                //This responds to command of type chat by sending story output that contains the message to all users.
 
-                break;                                                                 
+                break;
 
             case "take":
                 String takeItem = input.getValue();
@@ -60,66 +62,101 @@ public class GameController {
 
                 User u = Room.players.get(sha.getSessionId());
 
-
                 if (item.isPresent()) {
-                    StoryOutput TakeOut = new StoryOutput(item.get().getName(), "event", Room.players.get(sha.getSessionId()));
-                    broadcastToUsers(TakeOut);
-
-                    String insiderMsg = String.format(item.get().getTakeText(), "You");
-                    String outsiderMsg = String.format(item.get().getTakeText(), u.getName());
-
-
+                    StoryOutput takeOut = new StoryOutput(takeItem, "event", Room.players.get(sha.getSessionId()));
                     Room.items.remove(item.get());
                     u.getInv().add(item.get());
-                    broadcastToUsers(TakeOut);
+
+                    takeOut.setValue(String.format(item.get().getoTakeText(), takeOut.getUser().getName()));
+                    broadcastToOtherUsers(takeOut);
+
+                    takeOut.setValue(item.get().getuTakeText());
+                    broadcastToSingleUser(takeOut);
+
                 } else {
-                    template.convertAndSendToUser(sha.getSessionId(), "/", "You don't see that item in the room.");
+                    StoryOutput noTake = new StoryOutput("You don't see that item in the room.", "event", Room.players.get(sha.getSessionId()));
+                    broadcastToSingleUser(noTake);
+
                 }
                 break;
 
             case "use":
-                String UseItem = input.getValue();
+                String useItem = input.getValue();
 
-                Optional<Item> item1 = User.inv.stream().filter(i -> i.getName().equalsIgnoreCase(UseItem)).findFirst();
+                Optional<Item> item1 = Room.players.get(sha.getSessionId()).getInv().stream().filter(i -> i.getName().equalsIgnoreCase(useItem)).findFirst();
 
+                if (item1.isPresent()) {
+                    StoryOutput useOut = new StoryOutput(useItem, "event", Room.players.get(sha.getSessionId()));
+
+                    useOut.setValue(String.format(item1.get().getoUseText(), useOut.getUser().getName()));
+                    broadcastToOtherUsers(useOut);
+
+                    useOut.setValue(item1.get().getuUseText());
+                    broadcastToSingleUser(useOut);
+
+                } else {
+                    StoryOutput noTake = new StoryOutput("If I could use things I don't have I wouldn't be a computer programmer.", "event", Room.players.get(sha.getSessionId()));
+                    broadcastToSingleUser(noTake);
+                }
+                break;
             case "search":
                 String searchItem = input.getValue();
 
-                Optional<Item> item2 = Room.items.stream().filter(i -> i.getName().equalsIgnoreCase(searchItem)).findFirst();
+                Optional<Item> item2 = Room.players.get(sha.getSessionId()).getInv().stream().filter(i -> i.getName().equalsIgnoreCase(searchItem)).findFirst();
 
+                if (item2.isPresent()) {
+                    StoryOutput searchOut = new StoryOutput(searchItem, "event", Room.players.get(sha.getSessionId()));
 
-            case "inventory":
+                    searchOut.setValue(String.format(item2.get().getoSearchText(), searchOut.getUser().getName()));
+                    broadcastToOtherUsers(searchOut);
 
-                template.convertAndSendToUser(sha.getSessionId(), "/", User.inv);
+                    searchOut.setValue(item2.get().getuSearchText());
+                    broadcastToSingleUser(searchOut);
 
-            case "help":
+                } else {
+                    StoryOutput noTake = new StoryOutput("If I could use things I don't have I wouldn't be a computer programmer.", "event", Room.players.get(sha.getSessionId()));
+                    broadcastToSingleUser(noTake);
+                }
+                break;
 
-                template.convertAndSendToUser(sha.getSessionId(), "/", "The commands take, use, and search can be used on any item.\n" +
-                        "The command inventory will display the items you have.\nAnd this is, of course the help command... not much help really.");
+            case "get":
 
-
-
+                StoryOutput help = new StoryOutput("The commands take, use, and search can be used on any item.\n" +
+                        "The command inventory will display the items you have.\nAnd this is, of course the help command... not much help really.",
+                        "event", Room.players.get(sha.getSessionId()));
+                broadcastToSingleUser(help);
+                break;
 
 
             default:
 
         }
+     }
+
+
+    private void broadcastToOtherUsers(StoryOutput out) {
+        for (String session : Room.players.keySet()) {
+            if (session.equals(out.getUser().getSessionId())) {
+                continue;
+            }
+
+            template.convertAndSendToUser(session, "/", out);
+        }
     }
 
+    private void broadcastToSingleUser(StoryOutput out) {
+        template.convertAndSendToUser(out.getUser().getSessionId(), "/", out);
+    }
+
+}
 
 
-    // send to everyone else.
-    // for send to everyone, remove the if.
+// send to everyone else.
+// for send to everyone, remove the if.
 //                for (String session : Room.players.keySet()) {
 //                    if (session.equals(sha.getSessionId())) {
 //                        continue;
 //                   template.convertAndSendToUser(session, "/", input);
 
 
-    private void broadcastToUsers(StoryOutput out) {
-        for (String session : Room.players.keySet()) {
-            template.convertAndSendToUser(session, "/", out);
 
-        }
-    }
-}
