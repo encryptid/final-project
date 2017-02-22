@@ -1,7 +1,11 @@
 package com.theironyard.models;
 
-/**
- * Created by stephenwilliamson on 2/21/17.
- */
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Furniture {
+    String name;
+    List<Item> associatedStuff = new ArrayList<>();
+
 }

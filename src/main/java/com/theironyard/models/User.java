@@ -5,7 +5,7 @@ import java.util.List;
 public class User {
     private String sessionId;
     public String name;
-    List<Item> inv;
+    public static List<Item> inv;
 
     public User() {}
 

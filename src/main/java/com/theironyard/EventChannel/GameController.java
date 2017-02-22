@@ -13,59 +13,13 @@ import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
+import java.util.Optional;
+
 @Controller
 public class GameController {
 
-
     @Autowired
     SimpMessagingTemplate template;
-
-    @MessageMapping("/user-input")
-        public void greeting(Message message, Command input) throws Exception {
-        StompHeaderAccessor sha = StompHeaderAccessor.wrap(message);
-        input.setUser(Room.players.get(sha.getSessionId()));
-
-        switch (input.getType()) {
-
-            case "chat":
-                // todo: needs to send to all users. test and if it doesnt work lets move into for loop
-                template.convertAndSendToUser(sha.getSessionId(), "/", new StoryOutput(input.getValue(), "chat", Room.players.get(sha.getSessionId())));
-                for (String session : Room.players.keySet()) {
-                    if (session.equals(sha.getSessionId())) {
-                        continue;
-                    }
-                    break;
-                }
-
-            case "take":
-
-                System.out.println(input.getValue());
-                if(input.getValue().equals("peanuts")) {
-                    template.convertAndSendToUser(sha.getSessionId(), "/", new StoryOutput(Item.peanuts.getTakeText(), "event", Room.players.get(sha.getSessionId())));
-
-
-                }
-                break;
-
-
-
-
-
-            // send to everyone else.
-                // for send to everyone, remove the if.
-//                for (String session : Room.players.keySet()) {
-//                    if (session.equals(sha.getSessionId())) {
-//                        continue;
-//                    }
-//
-//                    template.convertAndSendToUser(session, "/", input);
-//                }
-
-            default:
-                System.out.println("Unrecognized message!");
-
-        }
-    }
 
     @EventListener
     public void stompEventHandler(AbstractSubProtocolEvent ev) {
@@ -85,51 +39,87 @@ public class GameController {
             System.out.println("Other Event:" + ev.getClass());
         }
     }
+
+    @MessageMapping("/user-input")
+    public void greeting(Message message, Command input) throws Exception {
+        StompHeaderAccessor sha = StompHeaderAccessor.wrap(message);
+        input.setUser(Room.players.get(sha.getSessionId()));
+
+        switch (input.getType()) {
+
+            case "chat":
+                StoryOutput ChatOut = new StoryOutput(input.getValue(), "chat", Room.players.get(sha.getSessionId()));
+                broadcastToUsers(ChatOut);
+
+                break;                                                                 
+
+            case "take":
+                String takeItem = input.getValue();
+
+                Optional<Item> item = Room.items.stream().filter(i -> i.getName().equalsIgnoreCase(takeItem)).findFirst();
+
+                User u = Room.players.get(sha.getSessionId());
+
+
+                if (item.isPresent()) {
+                    StoryOutput TakeOut = new StoryOutput(item.get().getName(), "event", Room.players.get(sha.getSessionId()));
+                    broadcastToUsers(TakeOut);
+
+                    String insiderMsg = String.format(item.get().getTakeText(), "You");
+                    String outsiderMsg = String.format(item.get().getTakeText(), u.getName());
+
+
+                    Room.items.remove(item.get());
+                    u.getInv().add(item.get());
+                    broadcastToUsers(TakeOut);
+                } else {
+                    template.convertAndSendToUser(sha.getSessionId(), "/", "You don't see that item in the room.");
+                }
+                break;
+
+            case "use":
+                String UseItem = input.getValue();
+
+                Optional<Item> item1 = User.inv.stream().filter(i -> i.getName().equalsIgnoreCase(UseItem)).findFirst();
+
+            case "search":
+                String searchItem = input.getValue();
+
+                Optional<Item> item2 = Room.items.stream().filter(i -> i.getName().equalsIgnoreCase(searchItem)).findFirst();
+
+
+            case "inventory":
+
+                template.convertAndSendToUser(sha.getSessionId(), "/", User.inv);
+
+            case "help":
+
+                template.convertAndSendToUser(sha.getSessionId(), "/", "The commands take, use, and search can be used on any item.\n" +
+                        "The command inventory will display the items you have.\nAnd this is, of course the help command... not much help really.");
+
+
+
+
+
+            default:
+
+        }
+    }
+
+
+
+    // send to everyone else.
+    // for send to everyone, remove the if.
+//                for (String session : Room.players.keySet()) {
+//                    if (session.equals(sha.getSessionId())) {
+//                        continue;
+//                   template.convertAndSendToUser(session, "/", input);
+
+
+    private void broadcastToUsers(StoryOutput out) {
+        for (String session : Room.players.keySet()) {
+            template.convertAndSendToUser(session, "/", out);
+
+        }
+    }
 }
-
-//    @MessageMapping("/hello/{channel}")
-//    public void respond(@DestinationVariable String channel, StoryOutput message) throws Exception {
-//        // TODO: server stuff here.
-//
-//        switch (input.type){
-//
-//            case "use":
-//                template.convertAndSend("/user-input", new StoryOutput("You are doing it guy!"));
-//
-//                break;
-//
-//            case "take":
-//                template.convertAndSend("/user-input", new StoryOutput("You now have" + input.value));
-//itemInv.add(input.user, input.value);
-// //TODO: Change this to db commands?
-
-
-//                break;
-//
-//            case "search":
-//                template.convertAndSend("/user-input", new StoryOutput(""));
-//
-//                break;
-//
-//            case "inventory":
-//                template.convertAndSend("/user-input", new StoryOutput(""));
-
-//                break;
-//
-//            default:
-//        }
-//
-//
-//        }
-
-// First arg: where to send it (channel name)
-// Second arg: what to send
-//template.convertAndSend("/channel/lincoln", new EventResponse("I hear ya: " + message.getMessage()));
-//        System.out.println(message.getMessage());
-
-
-//    @MessageMapping("/hello/{channel}")
-//    public void EventResponse(@DestinationVariable String channel, EventMessage message) throws Exception {
-//        template.convertAndSend(String.format("/channel/%s", channel), new EventResponse("" + message.getMessage()));
-//        System.out.println(message.getMessage());
-//    }
