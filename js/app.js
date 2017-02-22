@@ -23,35 +23,30 @@ app.controller('EventController', function ($scope, GameService, $timeout) {
         }, 0);
     });
 
-    // $scope.$apply(function () {
-    //         $scope.events = GameService.returnEvents();
-    //         console.log("events in the EventController: " + $scope.events);
-    //     });
-
 
 })
 
-app.controller('CursorController', function ($scope, GameService) {
-    //The purpose of this controller is to control the functions related to the "cursor"
+// app.controller('CursorController', function ($scope, GameService) {
+//     //The purpose of this controller is to control the functions related to the "cursor"
 
-    $scope.up = function () {
-        console.log('up working!');
-        GameService.move('up');
-    }
+//     $scope.up = function () {
+//         console.log('up working!');
+//         GameService.move('up');
+//     }
 
-    $scope.left = function () {
-        GameService.move('left');
-    }
+//     $scope.left = function () {
+//         GameService.move('left');
+//     }
 
-    $scope.right = function () {
-        GameService.move('right');
-    }
+//     $scope.right = function () {
+//         GameService.move('right');
+//     }
 
-    $scope.down = function () {
-        GameService.move('down');
-    }
+//     $scope.down = function () {
+//         GameService.move('down');
+//     }
 
-});
+// });
 
 app.controller('CommandController', function ($scope, GameService) {
     //The purpose of this controller is to handle validation of user input before submitting it
@@ -64,9 +59,6 @@ app.controller('CommandController', function ($scope, GameService) {
 
 
     $scope.command = function () {
-        // if (isAction() && isItem()) {
-        // GameService.action(entry, thing)
-        // }
 
         function isAction() {
             let lower = $scope.terminal.toLowerCase();
@@ -120,61 +112,7 @@ app.controller('CommandController', function ($scope, GameService) {
             console.log("Run command thinger!");
             send();
         };
-        // A BIG ANNOYING THING: the bottom of the element is partially hidden by the top of the div under it.
     };
-
-    // if ( check.test($scope.terminal) === true) {
-    //     let lower = $scope.terminal.toLowerCase();
-    //     let entry = lower.trim();
-    //     console.log(entry);
-    //     if (entry === "take") {
-    //         $scope.objPrompt = "Take what?"
-    //         GameService.action($scope.terminal, $scope.objSelect)
-    //             console.log("command is running");
-    //         // type = $scope.terminal;
-    //         // value = $scope.objSelect;
-    //         $scope.terminal = "";
-    //         $scope.objSelect = "";
-    //         let results = GameService.returnChats();
-    //         console.log(results);
-    //         $scope.objPrompt = "Input item";
-
-    //             // $scope.$apply(function () {
-    //             //     $scope.chats = GameService.returnEvents();
-    //             // });
-    //             //current hurdle: after the item is submitted, the textbox does not clear and reset the placeholder
-    //             //I think my current method is not ideally suited for this application.
-    //     } else if ($scope.terminal === "use") {
-    //         type = $scope.terminal
-    //     } else if ($scope.terminal === "search") {
-    //         type = $scope.terminal
-    //     } else if ($scope.terminal === "inventory") {
-    //         type = $scope.terminal
-    //     }
-    // console.log($scope.terminal);
-    // let splitter = $scope.terminal.split(" ")
-    // console.log(splitter);
-
-
-    // if ($scope.terminal === 'use') {
-    //     GameService.action('use', 'something');
-    // } else if ($scope.terminal === 'take') {
-    //     GameService.action('take', 'something');
-    // } else if ($scope.terminal === 'search') {
-    //     GameService.action('search')
-    // }
-
-
-    // if ('house' === 'cat' || 'boat' || 'car') {
-
-    // }
-    //  if ($scope.terminal !== "use" || $scope.terminal !== "take" || $scope.terminal !== "search" || $scope.terminal !== "inventory") {
-    //     console.log("Quit being stupid.")
-    // } else {
-    //     console.log($scope.terminal);
-    //     GameService.action($scope.terminal);
-    // }
-    // }
 
 });
 
@@ -183,15 +121,10 @@ app.controller('ChatController', function ($scope, GameService, $timeout) {
     //New chats should be populated automatically without direct intervention
         
     $scope.submitUser = function () {
-        GameService.addEvent("You have successfully logged in.");
-        // console.log($scope.name);
-        // let user = $scope.name;
-        // angular.copy(user, GameService.newUser);
-        // GameService.newUser = $scope.name;
-        // console.log(GameService.newUser);
+        GameService.addEvent("You have successfully joined the game.");
+        
         GameService.connect($scope.name, function () {
             console.log("connect running!");
-            // GameService.returnEvents();
 
             // Weird angular-magic. The $apply function tells angular that something is changing
             // in the function that is going to be of interest to templates.
@@ -216,17 +149,6 @@ app.controller('ChatController', function ($scope, GameService, $timeout) {
         $scope.chatBox = "";
 
     }
-
-    //when the heroku endpoint for chats becomes available, create a new connect function for chats and uncomment 
-    //this:
-    // GameService.connect(function () {
-    //     // Weird angular-magic. The $apply function tells angular that something is changing
-    //     // in the function that is going to be of interest to templates.
-    //     // 'Apply these updates to the template when they're done.'
-    //     $scope.$apply(function () {
-    //         $scope.chats = GameService.returnEvents();
-    //     });
-    // });
 })
 
 app.factory('GameService', function ($http) {
@@ -254,8 +176,8 @@ app.factory('GameService', function ($http) {
     return {
         connect: function (name, cb) {
             // console.log(person);
-            // const toad = new SockJS('https://fathomless-bastion-47154.herokuapp.com/gamesock');
-            const toad = new SockJS('http://192.168.1.22:8080/gamesock');
+            const toad = new SockJS('https://fathomless-bastion-47154.herokuapp.com/gamesock');
+            // const toad = new SockJS('http://192.168.1.22:8080/gamesock');
             client = Stomp.over(toad);
 
             client.connect({
@@ -324,7 +246,6 @@ app.factory('GameService', function ($http) {
 
         addEvent: function (message) {
             events.push(message);
-            // returnEvents();
         },
     }
 });
