@@ -66,12 +66,9 @@ public class GameController {
 
                 Optional<Item> item = Room.items.stream().filter(i -> i.getName().equalsIgnoreCase(takeItem)).findFirst();
 
-                User u = Room.players.get(sha.getSessionId());
 
                 if (item.isPresent()) {
                     StoryOutput takeOut = new StoryOutput(takeItem, "event", Room.players.get(sha.getSessionId()));
-                    Room.items.remove(item.get());
-                    u.getInv().add(item.get());
 
                     takeOut.setValue(String.format(item.get().getoTakeText(), takeOut.getUser().getName()));
                     broadcastToOtherUsers(takeOut);
@@ -101,8 +98,8 @@ public class GameController {
                     broadcastToSingleUser(useOut);
 
                 } else {
-                    StoryOutput noTake = new StoryOutput("If I could use things I don't have I wouldn't be a computer programmer.", "event", Room.players.get(sha.getSessionId()));
-                    broadcastToSingleUser(noTake);
+                    StoryOutput noUse = new StoryOutput("If I could use things I don't have I wouldn't be a computer programmer.", "event", Room.players.get(sha.getSessionId()));
+                    broadcastToSingleUser(noUse);
                 }
                 break;
             case "search":
@@ -120,8 +117,8 @@ public class GameController {
                     broadcastToSingleUser(searchOut);
 
                 } else {
-                    StoryOutput noTake = new StoryOutput("If I could use things I don't have I wouldn't be a computer programmer.", "event", Room.players.get(sha.getSessionId()));
-                    broadcastToSingleUser(noTake);
+                    StoryOutput noSearch = new StoryOutput("Whatever you are searching for isn't here, but I hope you find it.", "event", Room.players.get(sha.getSessionId()));
+                    broadcastToSingleUser(noSearch);
                 }
                 break;
 
