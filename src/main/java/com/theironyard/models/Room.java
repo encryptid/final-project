@@ -11,7 +11,7 @@ public class Room {
     public String name;
     public String description;
     public static Map<String, User> players = new HashMap<>();
-    public static List<Item> items = new ArrayList<>();
+    public static List<Item> items = new ArrayList<>(15);
 
     public Room(String name, String description) {
         this.name = name;
