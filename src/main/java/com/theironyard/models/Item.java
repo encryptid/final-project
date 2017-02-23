@@ -204,8 +204,7 @@ public class Item {
             "You can't use a desk. What would you even use it for?",
             "Who knows what % is doing?",
             "A large desk. It would be rather intimidating to face your boss on the other side of this desk. It is littered with the typical desk miscellany, including a LAMP, a LETTER OPENER, a DESK CALENDAR and a PEN CUP.",
-            "% is rummaging through the desk. Hopefully they're finding something useful.",
-            );
+            "% is rummaging through the desk. Hopefully they're finding something useful.");
 
     public static Item i15 = new Item("DRAWER",
             "I mean, let's be real; what are the chances you're going to need a desk drawer in the future? We're just going to leave that here.",
