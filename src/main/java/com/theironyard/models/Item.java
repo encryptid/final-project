@@ -132,20 +132,23 @@ public class Item {
             "%s is messing with pens in a cup on the desk AS NOISILY AS POSSIBLE!");
 
     public static Item i6 = new Item("MATCHBOOK",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "");
+            "Never know when you'll need to set some fires!",
+            "%s just snagged a book of matches!",
+            "You light up every match\n" +
+                    "In an over-sized pack letting each one burn\n" +
+                    "Down to your thick fingers before blowing and\n" +
+                    "Cursing them out...",
+            "%s is playing with fire! No literally they have lit matches!",
+            "It says MacArthur park?",
+            "%s is looking at a MATCHBOOK like a crazy person...");
 
     public static Item i7 = new Item("CIGAR CUTTER",
-            "",
-            "",
-            "",
-            "",
-            "You can’t help but feel the hole is perfectly finger-sized… Never mind, shake it off!",
-            "");
+            "Not really sure why but you now have a cigar guillotine, though I myself prefer a punch",
+            "You could swear %s just put something in their pocket!",
+            "How about no!",
+            "Did %s just try to cut their own finger off?",
+            "You can’t help but feel the hole is perfectly \"finger\"-sized… Never mind, shake it off!",
+            "%s is exceedingly strange");
 
     public static Item i8 = new Item("PHONOGRAPH",
             "",
@@ -168,7 +171,7 @@ public class Item {
             "",
             "",
             "",
-            "The painting seems to be on hinges. You open it, revealing a safe. It’s a little cliche, but the possibility of finding swag is appealing!",
+            "The PAINTING seems to be on hinges. You open it, revealing a safe. It’s a little cliche, but the possibility of finding swag is appealing!",
             "It’s a Depression-era landscape, probably fine art, but to you, it's literally kinda depressing. There’s something odd about it.");
 
     public static Item i11 = new Item("GRANDFATHER CLOCK",
@@ -179,7 +182,7 @@ public class Item {
             "You open the cabinet. It chimes… nuts. You were really hoping for that bird.",
             "You wonder if it cuckoos or chimes. Hopefully, it cuckoos. You like birds.");
 
-    public static Item i12 = new Item("glass bowl",
+    public static Item i12 = new Item("GLASS BOWL",
             "",
             "",
             "",
@@ -187,7 +190,7 @@ public class Item {
             "",
             "");
 
-    public static Item i13 = new Item("",
+    public static Item i13 = new Item("TABLE",
             "",
             "",
             "",
@@ -195,7 +198,23 @@ public class Item {
             "",
             "");
 
-    public static Item i14 = new Item("",
+    public static Item i14 = new Item("DESK",
+            "Bruh, you can't take the desk!",
+            "Looks like %s is trying to put the desk in their pocket?",
+            "",
+            "",
+            "",
+            "");
+
+    public static Item i15 = new Item("DRAWER",
+            "",
+            "",
+            "",
+            "",
+            "If it’s one thing you don’t need, it’s more paperclips. Wait, there’s something interesting in here… A key",
+            "");
+
+    public static Item i16 = new Item("BOOKSHELF",
             "",
             "",
             "",
@@ -203,7 +222,14 @@ public class Item {
             "",
             "");
 
-    public static Item i15 = new Item("",
+    public static Item i17 = new Item("BOOK",
+            "",
+            "",
+            "",
+            "",
+            "It's called 'Talking to Your Dog About Communism' that sounds delightful.",
+            "");
+    public static Item i18 = new Item("KEY",
             "",
             "",
             "",
@@ -217,6 +243,7 @@ public class Item {
         Room.items.add(i1); Room.items.add(i2); Room.items.add(i3); Room.items.add(i4); Room.items.add(i5);
         Room.items.add(i6); Room.items.add(i7); Room.items.add(i8); Room.items.add(i9); Room.items.add(i10);
         Room.items.add(i11); Room.items.add(i12); Room.items.add(i13); Room.items.add(i14); Room.items.add(i15);
+        Room.items.add(i16); Room.items.add(i17); Room.items.add(i18);
     }
 
 
