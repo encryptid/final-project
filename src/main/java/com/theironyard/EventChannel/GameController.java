@@ -13,6 +13,7 @@ import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -35,7 +36,12 @@ public class GameController {
             Room.players.remove(sha.getSessionId());
         } else if (ev instanceof SessionSubscribeEvent) {
             System.out.println("Client Channel Subscription");
-            StoryOutput intro = new StoryOutput("Intro text", "event", Room.players.get(sha.getSessionId()));
+            StoryOutput intro = new StoryOutput("You find yourself in a dimly lit room. \n" +
+                    "It appears to be an office of some sort. \n" +
+                    "Looking around, you see a Victorian-era PORTRAIT on one wall, \n" +
+                    "as well as a DESK and a BOOKSHELF. Along another wall, you see a" +
+                    "TABLE with a comfy looking CHAIR nearby. You'll probably have to explore... \n" +
+                    "if you want to get out...\n The actions TAKE, USE and SEARCH can be used with any ITEM.\n Type GET on action HELP to see these again", "event", Room.players.get(sha.getSessionId()));
             broadcastToSingleUser(intro);
             StoryOutput joined = new StoryOutput("A new player has joined the game!\n" +
                     "Send them a message with the box below","event", Room.players.get(sha.getSessionId()));
@@ -104,16 +110,31 @@ public class GameController {
                 break;
             case "search":
                 String searchItem = input.getValue();
+                Item contextItem = null;
 
-                Optional<Item> item2 = Room.players.get(sha.getSessionId()).getInv().stream().filter(i -> i.getName().equalsIgnoreCase(searchItem)).findFirst();
+                Optional<Item> itemInInv = Room.players.get(sha.getSessionId()).getInv()
+                        .stream()
+                        .filter(i -> i.getName().equalsIgnoreCase(searchItem))
+                        .findFirst();
 
-                if (item2.isPresent()) {
+                Optional<Item> itemInRoom = Room.getItems()
+                        .stream()
+                        .filter(i -> i.getName().equalsIgnoreCase(searchItem))
+                        .findFirst();
+
+                if (itemInInv.isPresent()) {
+                    contextItem = itemInInv.get();
+                } else if (itemInRoom.isPresent()) {
+                    contextItem = itemInRoom.get();
+                }
+
+                if (contextItem != null) {
                     StoryOutput searchOut = new StoryOutput(searchItem, "event", Room.players.get(sha.getSessionId()));
 
-                    searchOut.setValue(String.format(item2.get().getoSearchText(), searchOut.getUser().getName()));
+                    searchOut.setValue(String.format(contextItem.getoSearchText(), searchOut.getUser().getName()));
                     broadcastToOtherUsers(searchOut);
 
-                    searchOut.setValue(item2.get().getuSearchText());
+                    searchOut.setValue(contextItem.getuSearchText());
                     broadcastToSingleUser(searchOut);
 
                 } else {
