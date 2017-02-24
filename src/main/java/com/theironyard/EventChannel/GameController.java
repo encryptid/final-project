@@ -36,10 +36,10 @@ public class GameController {
             Room.players.remove(sha.getSessionId());
         } else if (ev instanceof SessionSubscribeEvent) {
             System.out.println("Client Channel Subscription");
-            StoryOutput intro = new StoryOutput("You find yourself in a dimly lit room. \n" +
-                    "It appears to be an office of some sort. \n" +
-                    "Looking around, you see a Victorian-era PORTRAIT on one wall, \n" +
-                    "as well as a DESK and a BOOKSHELF. Along another wall, you see a" +
+            StoryOutput intro = new StoryOutput("You find yourself in a dimly lit room." +
+                    "It appears to be an office of some sort." +
+                    "Looking around, you see a Victorian-era PORTRAIT on one wall," +
+                    "as well as a DESK and a BOOKSHELF. Along another wall, you see a " +
                     "TABLE with a comfy looking CHAIR nearby. You'll probably have to explore... \n" +
                     "if you want to get out...\n The actions TAKE, USE and SEARCH can be used with any ITEM.\n Type GET on action HELP to see these again", "event", Room.players.get(sha.getSessionId()));
             broadcastToSingleUser(intro);
@@ -56,6 +56,7 @@ public class GameController {
     public void greeting(Message message, Command input) throws Exception {
         StompHeaderAccessor sha = StompHeaderAccessor.wrap(message);
         input.setUser(Room.players.get(sha.getSessionId()));
+        User u = Room.players.get(sha.getSessionId());
 
         switch (input.getType()) {
 
@@ -69,6 +70,8 @@ public class GameController {
 
             case "take":
                 String takeItem = input.getValue();
+                Item contextItem = null;
+
 
                 Optional<Item> item = Room.items.stream().filter(i -> i.getName().equalsIgnoreCase(takeItem)).findFirst();
 
@@ -81,6 +84,8 @@ public class GameController {
 
                     takeOut.setValue(item.get().getuTakeText());
                     broadcastToSingleUser(takeOut);
+
+                    u.getInv().add(item.get());
 
                 } else {
                     StoryOutput noTake = new StoryOutput("You don't see that item in the room.", "event", Room.players.get(sha.getSessionId()));
@@ -110,7 +115,7 @@ public class GameController {
                 break;
             case "search":
                 String searchItem = input.getValue();
-                Item contextItem = null;
+                Item contextItem2 = null;
 
                 Optional<Item> itemInInv = Room.players.get(sha.getSessionId()).getInv()
                         .stream()
@@ -123,18 +128,18 @@ public class GameController {
                         .findFirst();
 
                 if (itemInInv.isPresent()) {
-                    contextItem = itemInInv.get();
+                    contextItem2 = itemInInv.get();
                 } else if (itemInRoom.isPresent()) {
-                    contextItem = itemInRoom.get();
+                    contextItem2 = itemInRoom.get();
                 }
 
-                if (contextItem != null) {
+                if (contextItem2 != null) {
                     StoryOutput searchOut = new StoryOutput(searchItem, "event", Room.players.get(sha.getSessionId()));
 
-                    searchOut.setValue(String.format(contextItem.getoSearchText(), searchOut.getUser().getName()));
+                    searchOut.setValue(String.format(contextItem2.getoSearchText(), searchOut.getUser().getName()));
                     broadcastToOtherUsers(searchOut);
 
-                    searchOut.setValue(contextItem.getuSearchText());
+                    searchOut.setValue(contextItem2.getuSearchText());
                     broadcastToSingleUser(searchOut);
 
                 } else {
@@ -145,8 +150,8 @@ public class GameController {
 
             case "get":
 
-                StoryOutput help = new StoryOutput("The commands take, use, and search can be used on any item.\n" +
-                        "The command inventory will display the items you have.\nAnd this is, of course the help command... not much help really.",
+                StoryOutput help = new StoryOutput("The commands TAKE, USE, and SEARCH can be used on any item.\n" +
+                        "And this is, of course the help command... not much help really.",
                         "event", Room.players.get(sha.getSessionId()));
                 broadcastToSingleUser(help);
                 break;

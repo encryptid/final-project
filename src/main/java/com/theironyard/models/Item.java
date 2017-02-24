@@ -221,8 +221,8 @@ public class Item {
             "It looks like %s is about to pull a bookshelf down on themselves.",
             "A bookshelf is useful for one thing; holding books. It's doing that fine without your intervention.",
             "When you first saw %s, you had them pegged as someone who really appreciated shelving. Judging by their interest in that bookshelf, you were right. Again.",
-            "It smells of rich mahogany and there are many leather-bound books. They’re probably valuable.",
-            "You wonder what %s's taste in books is...'");
+            "It smells of rich mahogany and there are many leather-bound books. They’re probably valuable. One BOOK stands apart from the others.",
+            "You see %s staring confusedly at the BOOKSHELF, wonder what their taste in books is like...'");
 
     public static Item i17 = new Item("BOOK",
             "Ooh, a book.",
